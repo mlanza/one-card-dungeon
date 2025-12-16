@@ -5,4 +5,4 @@ import * as o from "./ocd.js";
 
 const $state = $.atom(null);
 
-reg($state);
+reg({$state});
