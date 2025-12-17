@@ -6,7 +6,7 @@ export function init(level){
 }
 
 
-function rollEnergyDice(state){
+export function rollEnergyDice(state){
   state.dungeon = [];
   const {start, dungeon} = state;
   const [r1, r2, r3, r4, r5] = dungeon;
@@ -14,8 +14,8 @@ function rollEnergyDice(state){
   return {...state, start: newStart, energyDicePool: [1, 5, 6], assignedEnergyDice: []}
 }
 
-function assignEnergyDie(slot){
+export function assignEnergyDie(slot){
   return function(state){
-    return {...state, start: newStart, energyDicePool: [5, 6], assignedEnergyDice: [null, 1, null]}
+    return {...state, energyDicePool: [5, 6], assignedEnergyDice: [null, 1, null]}
   }
 }
