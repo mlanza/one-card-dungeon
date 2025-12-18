@@ -1,21 +1,60 @@
-export function init(level){
+import _ from "./libs/atomic_/core.js";
+
+export function level(level, h = hero(6)){
+  const m = monster("spider", 5, 4, 4, 3);
+  const w = wall();
+  const _ = null;
+  return [
+    [_, _, _, m, _],
+    [_, _, _, w, _],
+    [_, _, _, _, m],
+    [_, w, _, w, _],
+    [h, _, _, _, _]
+  ];
+}
+
+export function init(){
+  const dungeon = level(1);
   return {
-    start: [0, 4],
-    dungeon: [[null, null, null, "W", null]]
-  };
+    hero: [4, 0],
+    monsters: [[0, 3], [2, 4]],
+    dungeon
+  }
 }
 
-
-export function rollEnergyDice(state){
-  state.dungeon = [];
-  const {start, dungeon} = state;
-  const [r1, r2, r3, r4, r5] = dungeon;
-  const newStart = [5, 6];
-  return {...state, start: newStart, energyDicePool: [1, 5, 6], assignedEnergyDice: []}
+function wall(){
+  return {type: "wall"};
 }
 
-export function assignEnergyDie(slot){
+function monster(type, health, speed, attack, defense, range){
+  return {type, health, speed, attack, defense, range};
+}
+
+function hero(kind = null){
+  const earned = {speed: 1, attack: 1, defense: 1, range: 2};
+  return {type: "hero", health: 6, kind, earned};
+}
+
+export function energize(die){
+  const energy = _.chain(die, _.repeatedly(3, _), _.toArray);
   return function(state){
-    return {...state, energyDicePool: [5, 6], assignedEnergyDice: [null, 1, null]}
+    return {...state, energy};
+  }
+}
+
+export function assignEnergy(attribute){
+  return function(state){
+    const {energy, hero} = state;
+    const increase = _.first(energy);
+    const path = _.toArray(_.concat(["dungeon"], hero));
+    debugger
+    return _.chain(state,
+      _.update(_, "energy", _.pipe(_.rest, _.toArray)),
+      _.updateIn(_, path, function(hero){
+        const {earned} = hero;
+        const base = earned[attribute];
+        const value = base + increase;
+        return _.assoc(hero, attribute, value);
+      }));
   }
 }

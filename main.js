@@ -3,15 +3,16 @@ import $ from "./libs/atomic_/shell.js";
 import {reg} from "./libs/cmd.js";
 import * as o from "./ocd.js";
 
-const $state = $.atom(o.init(1));
+const $state = $.atom(o.init());
 
 reg({$state});
 
-$.swap($state, o.rollEnergyDice);
-$.swap($state, o.assignEnergyDie(2));
-$.swap($state, o.assignEnergyDie(1));
-$.swap($state, o.assignEnergyDie(3));
-$.swap($state, function(state){
+function die(sides = 6){
+  return _.randInt(sides) + 1;
+}
 
-})
+$.swap($state, o.energize(die));
+$.swap($state, o.assignEnergy("speed"));
+$.swap($state, o.assignEnergy("attack"));
+$.swap($state, o.assignEnergy("defense"));
 
