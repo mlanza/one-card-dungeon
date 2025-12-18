@@ -1,6 +1,6 @@
 import _ from "./libs/atomic_/core.js";
 
-export function level(level, h = hero(6)){
+export function level(level, h = hero()){
   const m = monster("spider", 2, 5, 4, 4, 3);
   const w = "X";
   const _ = null;
