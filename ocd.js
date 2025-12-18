@@ -1,25 +1,22 @@
 import _ from "./libs/atomic_/core.js";
 
 export function level(level, h = hero(6)){
-  const m = monster("spider", 5, 4, 4, 3);
-  const w = wall();
+  const m = monster("spider", 2, 5, 4, 4, 3);
+  const w = "X";
   const _ = null;
-  return [
-    [_, _, _, m, _],
+  const occupants = [h, m, m];
+  const dungeon = [
+    [_, _, _, 1, _],
     [_, _, _, w, _],
-    [_, _, _, _, m],
+    [_, _, _, _, 2],
     [_, w, _, w, _],
-    [h, _, _, _, _]
+    [0, _, _, _, _]
   ];
+  return {dungeon, occupants};
 }
 
 export function init(){
-  const dungeon = level(1);
-  return {
-    hero: [4, 0],
-    monsters: [[0, 3], [2, 4]],
-    dungeon
-  }
+  return level(1);
 }
 
 function wall(){
@@ -44,13 +41,11 @@ export function energize(die){
 
 export function assignEnergy(attribute){
   return function(state){
-    const {energy, hero} = state;
+    const {energy} = state;
     const increase = _.first(energy);
-    const path = _.toArray(_.concat(["dungeon"], hero));
-    debugger
     return _.chain(state,
       _.update(_, "energy", _.pipe(_.rest, _.toArray)),
-      _.updateIn(_, path, function(hero){
+      _.updateIn(_, ["occupants", 0], function(hero){
         const {earned} = hero;
         const base = earned[attribute];
         const value = base + increase;
