@@ -40,6 +40,9 @@ export function energize(die){
 }
 
 export function assignEnergy(attribute){
+  if (!["speed", "attack", "defense"].includes(attribute)) {
+    throw new Error("Invalid attribute selection.");
+  }
   return function(state){
     const {energy} = state;
     const increase = _.first(energy);
