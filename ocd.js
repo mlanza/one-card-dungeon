@@ -1,4 +1,5 @@
 import _ from "./libs/atomic_/core.js";
+import * as pf from "./pathfinding.js";
 
 const WALL = "X";
 
@@ -105,3 +106,5 @@ export function reach(occupant) {
     return _.chain(coord(occupant, state), (coord) => adjacencies(coord, state));
   };
 }
+
+export const paths = pf.paths;
