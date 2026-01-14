@@ -72,7 +72,7 @@ The function will return:
   [[1, -1], [1, -1], [1, -1]]
 ]
 ```
-This path moves from `[0, 3]` to `[3, 0]`, a square orthogonally adjacent to the target.
+This path moves from `[0, 3]` to `[3, 0]`, a square orthogonally adjacent to the target, by cutting corners.
 
 ### Example: Multiple Shortest Paths
 
