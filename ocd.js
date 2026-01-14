@@ -87,13 +87,12 @@ function adjacencies(origin, { occupants, dungeon }) {
     offsets,
     _.map(function (offset) {
       const [r, c] = offset;
-      const origin = _.eq([0, 0], offset);
-      const range = Math.abs(r) + Math.abs(c) == 2 ? 3 : 2;
+      const speed = _.eq([0, 0], offset) ? 0 : Math.abs(r) + Math.abs(c) == 2 ? 3 : 2;
       const coord = [row + r, col + c];
       const at = _.getIn(dungeon, coord);
       const id = at != null && at !== WALL ? at : null;
       const what = at === WALL ? wall : _.maybe(id, _.get(occupants, _));
-      return { coord, origin, offset, id, what, range };
+      return { coord, offset, id, what, speed };
     }, _),
     _.filtera(function ({ coord }) {
       return inBounds(coord);
@@ -101,10 +100,30 @@ function adjacencies(origin, { occupants, dungeon }) {
   );
 }
 
-export function reach(occupant) {
+export function moves(occupant) {
   return function (state) {
-    return _.chain(coord(occupant, state), (coord) => adjacencies(coord, state));
+    const entity = _.get(state.occupants, occupant);
+    const { speed } = entity;
+    return _.chain(coord(occupant, state), (coord) => adjacencies(coord, state), _.filtera(function (meta) {
+      return meta.speed <= speed && meta.speed !== 0;
+    }, _), _.mapa(function ({ offset, speed }) {
+      const type = "move";
+      const details = { occupant, offset, speed };
+      return { type, details };
+    }, _));
   };
+}
+
+export function move({details}) {
+  const { occupant, offset, speed } = details;
+  return function (state) {
+    const from = coord(occupant, state);
+    const to = add(from, offset);
+    return _.chain(state,
+      _.assocIn(_, ["dungeon", ...from], null),
+      _.assocIn(_, ["dungeon", ...to], occupant),
+      _.updateIn(_, ["occupants", occupant, "speed"], _.subtract(_, speed)));
+  }
 }
 
 function vacant(contents) {
