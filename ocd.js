@@ -166,7 +166,7 @@ export function paths(source, target, grid) {
         const [dr, dc] = step;
         const orthA = add(from, [dr, 0]);
         const orthB = add(from, [0, dc]);
-        return passable(orthA) && passable(orthB);
+        return passable(orthA) || passable(orthB);
     }
 
     function neighbors(pos) {
