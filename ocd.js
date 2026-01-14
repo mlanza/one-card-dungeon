@@ -167,6 +167,13 @@ function toOffsets(posPath) {
 
 export function paths(source, target, grid) {
     const grid_size = [grid.length, grid.length ? grid[0].length : 0];
+    
+    // If target is not vacant, find paths to adjacent positions instead
+    const actualTarget = vacant(_.getIn(grid, target)) ? target : null;
+    const adjacentTargets = actualTarget === null ? 
+        STEPS.map(step => add(target, step)).filter(pos => 
+            inBounds(pos, grid_size) && vacant(_.getIn(grid, pos))
+        ) : [];
 
     function passable(pos) {
         if (!inBounds(pos, grid_size)) return false;
@@ -212,7 +219,11 @@ export function paths(source, target, grid) {
             continue;
         }
 
-        if (samePos(current, target)) {
+        // Check if we've reached a valid goal
+        const isGoal = actualTarget !== null ? samePos(current, actualTarget) :
+            adjacentTargets.some(adj => samePos(current, adj));
+            
+        if (isGoal) {
             if (currentDist < minGoalDist) {
                 minGoalDist = currentDist;
                 goals = [currentKey];

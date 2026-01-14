@@ -72,8 +72,7 @@ Deno.test("pathfinding - path is blocked, finds alternative", () => {
             [0, 1],
             [1, 1],
             [1, -1],
-            [0, -1],
-            [1, 0]
+            [1, -1]
         ]
     ];
     assertEquals(result, expected);
@@ -89,4 +88,47 @@ Deno.test("pathfinding - user scenario with diagonal choice", () => {
     ];
     
     assertEquals(result, expected);
+});
+
+Deno.test("pathfinding - target is occupied, stops one move short", () => {
+    const grid = [
+        [null, null, null, 1, null],
+        [null, null, null, 'X', null],
+        [null, null, null, null, 9], // target occupied by 9
+        [null, 'X', null, 'X', null],
+        [null, null, null, null, null]
+    ];
+    const source = [0, 3];
+    const target = [2, 4];
+    const result = paths(source, target, grid);
+    // Should stop at [1, 4] which is adjacent to the occupied target
+    const expectedPaths = [
+        [
+            [1, 1]
+        ]
+    ];
+    assertEquals(result.length, expectedPaths.length);
+    assertEquals(result, expectedPaths);
+});
+
+Deno.test("pathfinding - target is vacant, reaches target", () => {
+    const grid = [
+        [null, null, null, 1, null],
+        [null, null, null, 'X', null],
+        [null, null, null, null, null], // target is vacant
+        [null, 'X', null, 'X', null],
+        [null, null, null, null, null]
+    ];
+    const source = [0, 3];
+    const target = [2, 4];
+    const result = paths(source, target, grid);
+    // Should reach the target since it's vacant
+    const expectedPaths = [
+        [
+            [1, 1],
+            [1, 0]
+        ]
+    ];
+    assertEquals(result.length, expectedPaths.length);
+    assertEquals(result, expectedPaths);
 });
