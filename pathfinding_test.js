@@ -1,7 +1,7 @@
 import {
   assertEquals,
 } from "https://deno.land/std@0.177.0/testing/asserts.ts";
-import { paths } from "./pathfinding.js";
+import { paths } from "./ocd.js";
 
 Deno.test("pathfinding - finds the shortest path to an adjacent square", () => {
   const grid = [
