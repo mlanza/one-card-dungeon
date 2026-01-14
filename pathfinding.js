@@ -18,17 +18,6 @@ const STEPS = [
     [-1, -1], [-1, 1], [1, -1], [1, 1]
 ];
 
-function reconstructPath(cameFrom, current) {
-    const path = [current];
-    let currentKey = key(current);
-    while (cameFrom.has(currentKey)) {
-        current = cameFrom.get(currentKey);
-        currentKey = key(current);
-        path.unshift(current);
-    }
-    return path;
-}
-
 function toOffsets(posPath) {
     const steps = [];
     for (let i = 0; i < posPath.length - 1; i++) {
@@ -105,7 +94,7 @@ export function paths(source, target, grid) {
             }
         }
     }
-    
+
     if (goals.length === 0) return [];
 
     // --- Reconstruct all shortest paths to the goal(s) ---
@@ -129,7 +118,7 @@ export function paths(source, target, grid) {
     for (const goalKey of goals) {
         allPaths.push(...buildPaths(goalKey));
     }
-    
+
     const offsetPaths = new Set();
     for (const path of allPaths) {
         offsetPaths.add(JSON.stringify(toOffsets(path)));
