@@ -13,29 +13,14 @@ Deno.test("pathfinding - finds the shortest path to an adjacent square", () => {
   ];
   const source = [0, 3];
   const target = [4, 0];
-
   const result = paths(source, target, grid);
-
-  // Expected path of positions:
-  // [0,3] -> [0,2] -> [1,1] -> [2,0] -> [3,0]
-  // Which corresponds to steps:
-  // [[0, -1], [1, -1], [1, -1], [1, 0]]
-  // The path has 4 steps.
-
-  // Let's verify other possible paths are longer.
-  // Another path: [0,3]->[0,2]->[1,2]->[2,2]->[2,1]->[3,1](blocked) - no
-  // Path through [2,1] -> [3,0] is shorter.
-  // [0,3]->[0,2]->[1,2]->[2,2]->[2,1]->[2,0]->[3,0] is 6 steps.
-
   const expectedPaths = [
     [
-      [0, -1],
       [1, -1],
       [1, -1],
-      [1, 0],
+      [1, -1],
     ],
   ];
-
   assertEquals(result.length, expectedPaths.length);
   assertEquals(result, expectedPaths);
 });
@@ -48,21 +33,16 @@ Deno.test("pathfinding - handles multiple shortest paths", () => {
   ];
   const source = [0, 0];
   const target = [2, 2];
-
   const result = paths(source, target, grid);
-
   const expected = [
-    [ [1,1], [0,1] ], // [0,0]->[1,1]->[1,2]
-    [ [0,1], [1,1] ], // [0,0]->[0,1]->[1,2]
-    [ [1,1], [1,0] ], // [0,0]->[1,1]->[2,1]
-    [ [1,0], [1,1] ]  // [0,0]->[1,0]->[2,1]
+    [ [1,1], [0,1] ],
+    [ [0,1], [1,1] ],
+    [ [1,1], [1,0] ],
+    [ [1,0], [1,1] ]
   ];
-  
-  // Sort outer and inner arrays to make comparison stable
   const sortFn = (a,b) => JSON.stringify(a).localeCompare(JSON.stringify(b));
   result.sort(sortFn);
   expected.sort(sortFn);
-
   assertEquals(result, expected);
 });
 
@@ -88,20 +68,26 @@ Deno.test("pathfinding - path is blocked, finds alternative", () => {
     const source = [0, 0];
     const target = [3, 1];
     const result = paths(source, target, grid);
-
-    // direct path is [1,1],[1,0],[1,0] to [3,1]... but [1,1] is blocked via corner cutting
-    // and [1,0] is blocked. So must go around.
-    // [0,0]->[0,1]->[0,2]->[0,3]->[1,3]->[2,3]->[2,2]->[2,1]
     const expected = [
         [
             [0, 1],
             [0, 1],
-            [0, 1],
-            [1, 0],
-            [1, 0],
-            [0, -1],
+            [1, 1],
+            [1, -1],
             [0, -1]
         ]
     ];
+    assertEquals(result, expected);
+});
+
+Deno.test("pathfinding - user scenario with diagonal choice", () => {
+    const grid = [[null, null, 9], ["X", null, "X"], [1, null, null]];
+    const source = [0, 2];
+    const target = [2, 0];
+    const result = paths(source, target, grid);
+    const expected = [
+        [[1, -1], [1, 0]]
+    ];
+    
     assertEquals(result, expected);
 });

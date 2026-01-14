@@ -33,7 +33,7 @@ An external helper function, `_.getIn(grid, [row, col])`, is used to access cell
 Movement is calculated in steps, where each step is a `[row, col]` offset.
 
 -   **8-Directional Movement**: Actors can move one square at a time, either orthogonally or diagonally. This corresponds to step offsets where `row` and `col` are `1`, `0`, or `-1` (but not `[0, 0]`).
--   **Diagonal Movement**: A diagonal move is only considered legitimate if a path of two orthogonal moves to the same destination square is also clear of obstacles. This "no corner cutting" rule prevents moving through the corner of two adjacent walls.
+-   **Diagonal Movement**: A diagonal move is only considered legitimate if **at least one** of the two corresponding orthogonal squares is also passable. For a diagonal move from `A` to `C`, if the path can be made non-diagonally as `A -> B -> C` or `A -> D -> C`, the move is allowed as long as either `B` or `D` is passable. This allows for "sliding" past single corners.
 
 ## Pathfinding Goal
 
@@ -69,7 +69,7 @@ The function will return:
 
 ```js
 [
-  [[0, -1], [1, -1], [1, -1], [1, 0]]
+  [[1, -1], [1, -1], [1, -1]]
 ]
 ```
 This path moves from `[0, 3]` to `[3, 0]`, a square orthogonally adjacent to the target.

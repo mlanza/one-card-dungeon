@@ -1,7 +1,8 @@
 {
   "tasks": {
     "dev": "deno run --watch main.js",
-    "serve": "npx serve ."
+    "serve": "npx serve .",
+    "test:pathfinding": "deno test pathfinding_test.js"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1"
