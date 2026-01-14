@@ -171,7 +171,6 @@ export function paths(source, target, grid) {
     function passable(pos) {
         if (!inBounds(pos, grid_size)) return false;
         if (samePos(pos, source)) return true;
-        if (samePos(pos, target)) return false;
         return vacant(_.getIn(grid, pos));
     }
 
@@ -209,13 +208,18 @@ export function paths(source, target, grid) {
         const currentKey = key(current);
         const currentDist = dist.get(currentKey);
 
-        if (manhattan(current, target) === 1) {
+        if (minGoalDist !== Infinity && currentDist > minGoalDist) {
+            continue;
+        }
+
+        if (samePos(current, target)) {
             if (currentDist < minGoalDist) {
                 minGoalDist = currentDist;
                 goals = [currentKey];
             } else if (currentDist === minGoalDist) {
                 goals.push(currentKey);
             }
+            continue;
         }
 
         for (const neighbor of neighbors(current)) {
