@@ -130,10 +130,6 @@ function vacant(contents) {
     return contents == null;
 }
 
-function cell(pos, grid) {
-    return _.getIn(grid, pos);
-}
-
 function samePos(a, b) {
     return a[0] === b[0] && a[1] === b[1];
 }
@@ -176,7 +172,7 @@ export function paths(source, target, grid) {
         if (!inBounds(pos, grid_size)) return false;
         if (samePos(pos, source)) return true;
         if (samePos(pos, target)) return false;
-        return vacant(cell(pos, grid));
+        return vacant(_.getIn(grid, pos));
     }
 
     function diagonalIsLegit(from, step) {
