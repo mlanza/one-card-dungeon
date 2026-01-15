@@ -33,6 +33,12 @@ function hero(kind = null) {
   return { type: "hero", health: 6, kind, earned };
 }
 
+function skill(key) {
+  return function (who) {
+    return _.get(who, key) + _.getIn(who, ["earned", key], 0);
+  }
+}
+
 export function energize(die) {
   const energy = _.chain(die, _.repeatedly(3, _), _.toArray);
   return function (state) {
@@ -149,6 +155,34 @@ export function move({details}) {
       _.assocIn(_, ["dungeon", ...from], null),
       _.assocIn(_, ["dungeon", ...to], occupant),
       _.updateIn(_, ["occupants", occupant, "speed"], _.subtract(_, speed)));
+  }
+}
+
+export function where(occupant, dungeon) {
+  return _.reducekv(function (memo, r, row) {
+    return _.maybe(row, _.reducekv(function (memo, c, content) {
+      return _.eq(occupant, content) ? _.conj(memo, [r, c]) : memo;
+    }, [], _), _.first, _.reduced) || memo;
+  }, null, dungeon);
+}
+
+export function enemies(attacker, dungeon) {
+  const enemy = _.and(_.isInt, _.partial(attacker === 0 ? _.notEq : _.eq, attacker));
+  return _.reducekv(function (memo, r, row) {
+    const hits = _.reducekv(function (memo, c, content) {
+      return enemy(content) ? _.conj(memo, [r, c]) : memo;
+    }, [], row);
+    return _.count(hits) ? _.conj(memo, ...hits) : memo;
+  }, [], dungeon);
+}
+
+export function targets(attacker) {
+  return function (state) {
+    const { occupants, dungeon } = state;
+    const range = _.chain(_.get(occupants, attacker), skill("range"));
+    const source = where(attacker, dungeon);
+    const targets = enemies(attacker, dungeon);
+    return { range, source, targets };
   }
 }
 
