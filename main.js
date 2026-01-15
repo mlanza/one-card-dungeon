@@ -12,3 +12,5 @@ $.swap($state, o.energize(eff.rolling(4, 5, 6)));
 $.swap($state, o.assignEnergy("speed"));
 $.swap($state, o.assignEnergy("attack"));
 $.swap($state, o.assignEnergy("defense"));
+$.swap($state, _.chain($state, _.deref, o.adventures, _.first, o.adventure));
+$.swap($state, _.chain($state, _.deref, o.adventures, _.first, o.adventure));

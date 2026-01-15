@@ -1,19 +1,20 @@
 import _ from "./libs/atomic_/core.js";
 
-
 const WALL = "X";
+const HERO = 0;
+const H = HERO;
+const X = WALL;
 
 export function level(level, h = hero()) {
   const m = monster("spider", 2, 5, 4, 4, 3);
-  const w = WALL;
   const _ = null;
   const occupants = [h, m, m];
   const dungeon = [
     [_, _, _, 1, _],
-    [_, _, _, w, _],
+    [_, _, _, X, _],
     [_, _, _, _, 2],
-    [_, w, _, w, _],
-    [0, _, _, _, _],
+    [_, X, _, X, _],
+    [H, _, _, _, _],
   ];
   return { dungeon, occupants };
 }
@@ -158,6 +159,12 @@ export function move({details}) {
   }
 }
 
+export function attack({details}){
+  return function(state){
+    return state;
+  }
+}
+
 export function where(occupant, dungeon) {
   return _.reducekv(function (memo, r, row) {
     return _.maybe(row, _.reducekv(function (memo, c, content) {
@@ -198,6 +205,15 @@ export function attacks(attacker) {
       }, _));
   }
 }
+
+export function adventure(command){
+  const actions = {move, attack};
+  const {type, details} = command;
+  const action = _.get(actions, type);
+  return action(command);
+}
+
+export const adventures = _.comp(_.toArray, _.spread(_.concat), _.juxt(attacks(HERO), moves(HERO)));
 
 const vacant = _.isNil;
 
