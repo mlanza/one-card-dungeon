@@ -119,16 +119,10 @@ export function range(source, target, dungeon) {
 }
 
 function cheapest(paths) {
-  const costs = _.chain(paths,
-    _.mapa(function (path) {
-      return _.reduce(function (sum, offset) {
-        return sum + cost(offset);
-      }, 0, path);
-    }, _));
-  const cheapest = _.min(...costs);
+  const distances = _.mapa(dist, paths);
+  const cheapest = _.min(...distances);
   return _.reducekv(function (memo, idx, path) {
-    const cost = _.get(costs, idx);
-    return cost === cheapest ? _.conj(memo, path) : memo;
+    return _.get(distances, idx) === cheapest ? _.conj(memo, path) : memo;
   }, [], paths);
 }
 
