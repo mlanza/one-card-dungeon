@@ -180,7 +180,7 @@ function blot(targets, dungeon){
   return _.reduce(_.assocIn(_, _, null), dungeon, targets);
 }
 
-export function targets(attacker) {
+export function attacks(attacker) {
   return function (state) {
     const { occupants, dungeon } = state;
     const range = _.chain(_.get(occupants, attacker), skill("range"));
@@ -189,12 +189,13 @@ export function targets(attacker) {
     return _.chain(targets,
       _.map(function(target){
         const cost = _.chain(paths(source, target, blot(targets, dungeon)), cheapest, _.first, dist);
-        return {target, cost};
+        const details = {target, cost};
+        const type = "attack";
+        return {type, details};
       }, _),
-      _.filter(function({cost}){
-        return cost <= range;
-      }, _),
-      _.mapa(({target}) => target, _));
+      _.filtera(function({details}){
+        return details.cost <= range;
+      }, _));
   }
 }
 
