@@ -152,9 +152,7 @@ export function move({details}) {
   }
 }
 
-function vacant(contents) {
-    return contents == null;
-}
+const vacant = _.isNil;
 
 const samePos = _.eq;
 
