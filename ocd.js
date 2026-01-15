@@ -156,9 +156,7 @@ function vacant(contents) {
     return contents == null;
 }
 
-function samePos(a, b) {
-    return a[0] === b[0] && a[1] === b[1];
-}
+const samePos = _.eq;
 
 function key(pos) {
     return pos.join(',');
