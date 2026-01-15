@@ -150,9 +150,9 @@ export function moves(occupant) {
 export function move({details}) {
   const { occupant, offset, speed } = details;
   return function (state) {
-    const found = _.chain(state, moves(occupant), _.detect(function(move){
-      return _.eq(move.details, details);
-    }, _));
+    const found = _.chain(state,
+      moves(occupant),
+      _.detect(_.pipe(_.get(_, "details"), _.eq(details, _)), _));
     if (!found){
       throw new Error(`Invalid move.`);
     }
