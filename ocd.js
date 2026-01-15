@@ -2,8 +2,8 @@ import _ from "./libs/atomic_/core.js";
 
 const WALL = "X";
 const HERO = 0;
-const H = HERO;
-const X = WALL;
+export const H = HERO;
+export const X = WALL;
 
 export function level(level, h = hero()) {
   const m = monster("spider", 2, 5, 4, 4, 3);
@@ -150,6 +150,12 @@ export function moves(occupant) {
 export function move({details}) {
   const { occupant, offset, speed } = details;
   return function (state) {
+    const found = _.chain(state, moves(occupant), _.detect(function(move){
+      return _.eq(move.details, details);
+    }, _));
+    if (!found){
+      throw new Error(`Invalid move.`);
+    }
     const from = coord(occupant, state);
     const to = add(from, offset);
     return _.chain(state,
