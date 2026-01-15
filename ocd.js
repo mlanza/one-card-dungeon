@@ -72,7 +72,7 @@ export function coord(occupant, { occupants, dungeon }) {
     throw new Error(`Occupant must be an int.`);
   }
   if (!_.get(occupants, occupant)) {
-    throw new Error(`Occupant must be present.`)
+    throw new Error(`Occupant must be present.`);
   }
   const row = _.detectIndex(function (row) {
     return _.includes(row, occupant);
