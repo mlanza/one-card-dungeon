@@ -87,7 +87,7 @@ function adjacencies(origin, { occupants, dungeon }) {
     offsets,
     _.map(function (offset) {
       const [r, c] = offset;
-      const speed = _.eq([0, 0], offset) ? 0 : Math.abs(r) + Math.abs(c) == 2 ? 3 : 2;
+      const speed = cost(offset);
       const coord = [row + r, col + c];
       const at = _.getIn(dungeon, coord);
       const id = at != null && at !== WALL ? at : null;
@@ -100,12 +100,44 @@ function adjacencies(origin, { occupants, dungeon }) {
   );
 }
 
+function cost(offset) {
+  const [r, c] = offset;
+  return _.eq([0, 0], offset) ? 0 : Math.abs(r) + Math.abs(c) == 2 ? 3 : 2;
+}
+
+function dist(path) {
+  return _.reduce(function (sum, offset) {
+    return sum + cost(offset);
+  }, 0, path);
+}
+
+export function range(source, target, dungeon) {
+  return _.chain(paths(source, target, _.assocIn(dungeon, [target], null)), //vacating target includes target location
+    cheapest,
+    _.first,
+    dist);
+}
+
+function cheapest(paths) {
+  const costs = _.chain(paths,
+    _.mapa(function (path) {
+      return _.reduce(function (sum, offset) {
+        return sum + cost(offset);
+      }, 0, path);
+    }, _));
+  const cheapest = _.min(...costs);
+  return _.reducekv(function (memo, idx, path) {
+    const cost = _.get(costs, idx);
+    return cost === cheapest ? _.conj(memo, path) : memo;
+  }, [], paths);
+}
+
 export function moves(occupant) {
   return function (state) {
     const entity = _.get(state.occupants, occupant);
     const { speed } = entity;
     return _.chain(coord(occupant, state), (coord) => adjacencies(coord, state), _.filtera(function (meta) {
-      return meta.speed <= speed && meta.speed !== 0;
+      return meta.speed <= speed && meta.speed !== 0 && meta.what == null;
     }, _), _.mapa(function ({ offset, speed }) {
       const type = "move";
       const details = { occupant, offset, speed };
@@ -167,11 +199,11 @@ function toOffsets(posPath) {
 
 export function paths(source, target, grid) {
     const grid_size = [grid.length, grid.length ? grid[0].length : 0];
-    
+
     // If target is not vacant, find paths to adjacent positions instead
     const actualTarget = vacant(_.getIn(grid, target)) ? target : null;
-    const adjacentTargets = actualTarget === null ? 
-        STEPS.map(step => add(target, step)).filter(pos => 
+    const adjacentTargets = actualTarget === null ?
+        STEPS.map(step => add(target, step)).filter(pos =>
             inBounds(pos, grid_size) && vacant(_.getIn(grid, pos))
         ) : [];
 
@@ -222,7 +254,7 @@ export function paths(source, target, grid) {
         // Check if we've reached a valid goal
         const isGoal = actualTarget !== null ? samePos(current, actualTarget) :
             adjacentTargets.some(adj => samePos(current, adj));
-            
+
         if (isGoal) {
             if (currentDist < minGoalDist) {
                 minGoalDist = currentDist;
