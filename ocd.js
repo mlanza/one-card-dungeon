@@ -176,13 +176,25 @@ export function enemies(attacker, dungeon) {
   }, [], dungeon);
 }
 
+function blot(targets, dungeon){
+  return _.reduce(_.assocIn(_, _, null), dungeon, targets);
+}
+
 export function targets(attacker) {
   return function (state) {
     const { occupants, dungeon } = state;
     const range = _.chain(_.get(occupants, attacker), skill("range"));
     const source = where(attacker, dungeon);
     const targets = enemies(attacker, dungeon);
-    return { range, source, targets };
+    return _.chain(targets,
+      _.map(function(target){
+        const cost = _.chain(paths(source, target, blot(targets, dungeon)), cheapest, _.first, dist);
+        return {target, cost};
+      }, _),
+      _.filter(function({cost}){
+        return cost <= range;
+      }, _),
+      _.mapa(({target}) => target, _));
   }
 }
 
