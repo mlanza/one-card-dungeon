@@ -1,4 +1,6 @@
 import _ from "./libs/atomic_/core.js";
+export { default as los } from "./libs/los.js";
+export { default as paths } from "./libs/paths.js";
 
 const WALL = "#";
 const HERO = 0;
@@ -262,8 +264,3 @@ function dim(grid){
   const width = _.count(row);
   return [height, width];
 }
-
-export { default as los } from "./libs/los.js";
-
-
-export { default as paths } from "./libs/paths.js";
