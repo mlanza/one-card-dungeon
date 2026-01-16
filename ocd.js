@@ -322,23 +322,39 @@ export function locations(monster, {dungeon, occupants}){
   const rng = _.chain(aggressor, skill("range"));
   const speed = _.chain(aggressor, skill("speed"));
   const modified = without(dungeon, target, source);
-  const locations = _.chain(dungeon, vacated,
+  const ranked = _.chain(dungeon, vacated,
     _.mapa(function(coord){
       const gap = range(coord, target, modified);
       const distance  = range(source, coord, modified);
-      const striking = gap <= rng;
-      const sight = los(coord, target, modified);
-      return {coord, distance, gap, striking, sight};
+      const sight = !!los(coord, target, modified);
+      const maximum = gap === rng;
+      const striking = gap <= rng && !!sight;
+      return {coord, distance, gap, striking, maximum, sight};
     }, _),
     _.filtera(function({distance}){
       return distance <= speed;
     }, _),
-    _.sortBy(_.get(_, "gap"), _));
-  return {target, monster, locations}
-}
-
-function vacantsAtRange(distance, target = HERO){
-
+    _.sort(
+      _.desc(function({maximum, striking}){
+        return maximum && striking;
+      }),
+      _.desc(function({striking}){
+        return striking;
+      }),
+      _.desc(function({maximum}){
+        return maximum;
+      }),
+      _.desc(function({distance}){
+        return distance;
+      }), _));
+  const best = _.maybe(ranked, _.first, function({striking, maximum, sight}){
+    return {striking, maximum, sight};
+  });
+  const selected = _.filtera(function({striking, maximum, sight}){
+    return _.eq({striking, maximum, sight}, best);
+  }, ranked);
+  const locations = _.mapa(_.get(_, "coord"), selected);
+  return {monster, locations}
 }
 
 export function attacks(friend = isHero) {
