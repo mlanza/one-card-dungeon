@@ -262,7 +262,7 @@ export function attacks(attacker) {
     return _.chain(targets,
       _.map(function(target){
         const cost = _.chain(paths(source, target, blot(targets, dungeon)), cheapest, _.first, dist);
-        const details = {target, cost};
+        const details = {attacker, target, cost};
         const type = "attack";
         return {type, details};
       }, _),
