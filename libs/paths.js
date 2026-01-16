@@ -16,7 +16,7 @@ function manhattan(a, b) {
   return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
 }
 
-function add(pos, step) {
+export function add(pos, step) {
   return [pos[0] + step[0], pos[1] + step[1]];
 }
 

@@ -1,6 +1,7 @@
 import _ from "./libs/atomic_/core.js";
-export { default as los } from "./libs/los.js";
+import {add} from "./libs/paths.js";
 export { default as paths } from "./libs/paths.js";
+export { default as los } from "./libs/los.js";
 
 const WALL = "#";
 const HERO = 0;
@@ -222,41 +223,6 @@ export function adventure(command){
 }
 
 export const adventures = _.comp(_.toArray, _.spread(_.concat), _.juxt(attacks(HERO), moves(HERO)));
-
-const vacant = _.isNil;
-
-const samePos = _.eq;
-
-function key(pos) {
-    return pos.join(',');
-}
-
-function unkey(k) {
-    return k.split(',').map(Number);
-}
-
-function manhattan(a, b) {
-    return Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]);
-}
-
-function add(pos, step) {
-    return [pos[0] + step[0], pos[1] + step[1]];
-}
-
-const STEPS = [
-    [-1, 0], [1, 0], [0, -1], [0, 1],
-    [-1, -1], [-1, 1], [1, -1], [1, 1]
-];
-
-function toOffsets(posPath) {
-    const steps = [];
-    for (let i = 0; i < posPath.length - 1; i++) {
-        const a = posPath[i];
-        const b = posPath[i + 1];
-        steps.push([b[0] - a[0], b[1] - a[1]]);
-    }
-    return steps;
-}
 
 function dim(grid){
   const height = _.count(grid);
