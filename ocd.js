@@ -1,6 +1,6 @@
 import _ from "./libs/atomic_/core.js";
 
-const WALL = "X";
+const WALL = "#";
 const HERO = 0;
 export const H = HERO;
 export const X = WALL;
@@ -255,6 +255,21 @@ function toOffsets(posPath) {
     }
     return steps;
 }
+
+function dim(grid){
+  const height = _.count(grid);
+  const row = _.first(grid);
+  const width = _.count(row);
+  return [height, width];
+}
+
+export function los(source, target, grid){
+  const modified = blot([target], grid);
+  const [h, w] = dim(grid);
+  const cleared = _.toArray(_.repeat(h, _.toArray(_.repeat(w, null, w))));
+  return _.mapa(d => paths(source, target, d), [modified, cleared]);
+}
+
 
 export function paths(source, target, grid) {
     const grid_size = [grid.length, grid.length ? grid[0].length : 0];

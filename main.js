@@ -12,4 +12,4 @@ $.swap($state, o.energize(eff.rolling(4, 5, 6)));
 $.swap($state, o.assignEnergy("speed"));
 $.swap($state, o.assignEnergy("attack"));
 $.swap($state, o.assignEnergy("defense"));
-$.swap($state, o.move({type: "move", details: {occupant: o.H, offset: [-1, 0], speed: 2}}));
+//$.swap($state, o.move({type: "move", details: {occupant: o.H, offset: [-1, 0], speed: 2}}));
