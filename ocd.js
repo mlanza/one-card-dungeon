@@ -261,7 +261,7 @@ export function attacks(attacker) {
     const targets = enemies(attacker, dungeon);
     return _.chain(targets,
       _.map(function(target){
-        const cost = _.chain(paths(source, target, blot(targets, dungeon)), cheapest, _.first, dist);
+        const cost = _.chain(los(source, target, dungeon), _.first, dist);
         const details = {attacker, target, cost};
         const type = "attack";
         return {type, details};
