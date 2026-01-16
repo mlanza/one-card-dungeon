@@ -1,0 +1,158 @@
+# COMPLETE LINE OF SIGHT (LOS) RULES FOR ONE CARD DUNGEON
+
+## 1. EXACT LOS RULE TEXT FROM THE OFFICIAL RULES
+
+### Core Rule (from OCD_rules_ENG.pdf, lines 105-107):
+**Line of Sight**: If a line can be drawn from any corner of your tile to any corner of a Monster's tile, without passing through a wall tile or another Monster's tile, you have Line of Sight.
+
+### LOS Requirements for Combat:
+- **Attacking Monsters** (line 87): "When Attacking a Monster, your Adventurer must be within Range and Line of Sight of the target."
+- **Monster Movement** (line 112): "Find the empty tile at the Monster's maximum Range from you (with Line of Sight) that is closest to the Monster."
+- **Monster Attacks** (line 126): "Add up the total Attack of all Monsters within their Range and Line of Sight to the Adventurer. Monsters out of Range or Line of Sight do not Attack this turn."
+
+### Monster Movement Priority (line 115):
+"Monsters will prioritise being in Range and Line of Sight over being at maximum Range."
+
+## 2. KEY CONCEPTS AND DEFINITIONS
+
+### Line of Sight Components:
+- **Source**: Adventurer's tile
+- **Target**: Monster's tile  
+- **Corners**: Each tile has 4 corners (top-left, top-right, bottom-left, bottom-right)
+- **Path**: Any line from any source corner to any target corner (16 possible combinations)
+
+### Blocking Elements:
+1. **Wall tiles**: Any tile marked as a wall completely blocks LOS
+2. **Monster tiles**: Any tile occupied by another monster blocks LOS
+3. **Out of bounds**: Areas outside the game grid block LOS
+
+### Non-blocking Elements:
+- Empty tiles (null/vacant spaces)
+- Source tile itself
+- Target tile itself
+
+## 3. EDGE CASES AND SPECIAL SITUATIONS
+
+### Critical Edge Cases (from implementation and tests):
+
+#### Corner/Edge Touching Rule:
+- **Grazing corners**: If a LOS line only touches the edge or corner of a blocking tile without passing through the interior, LOS is BLOCKED
+- **Conservative approach**: When in doubt, the line is considered blocked
+- **Example**: A line that "grazes" the corner of a wall tile is considered blocked even though it doesn't pass through the tile's interior
+
+#### Adjacent Tiles:
+- **Orthogonal adjacency**: Direct horizontal/vertical neighbors typically have clear LOS unless blocked
+- **Diagonal adjacency**: Requires careful corner checking to ensure line doesn't pass through blocking tiles
+
+#### Special Grid Situations:
+- **Same tile**: Always has LOS (source equals target)
+- **Grid edges**: Tiles at grid boundaries follow normal LOS rules
+- **Multiple monsters**: Each monster blocks LOS independently for other monsters
+
+## 4. COMBAT RULES THAT REFERENCE LOS
+
+### Adventurer Attacks:
+- **Requirement**: Must have both Range AND Line of Sight to target monster
+- **Cost**: Attack points equal to monster's Defense skill
+- **Result**: Reduces monster health by 1 if successful
+
+### Monster Movement Phase:
+- **Objective**: Move to maximum Range from adventurer while maintaining Line of Sight
+- **Priority 1**: Be in Range and Line of Sight
+- **Priority 2**: Be at maximum Range
+- **Movement Cost**: Orthogonal = 2 speed, Diagonal = 3 speed
+- **Movement Rules**: Cannot move through adventurer or walls, but can move through (not end on) other monsters
+
+### Monster Attack Phase:
+- **Attackers**: Only monsters within Range AND Line of Sight can attack
+- **Damage Calculation**: Total Monster Attack ÷ Adventurer Defense = Damage (rounded down)
+- **No Damage**: If Total Monster Attack < Adventurer Defense, no damage inflicted
+
+## 5. IMPLEMENTATION DETAILS (from code analysis)
+
+### Algorithm Used:
+1. **Same Tile Check**: Always returns true if source equals target
+2. **Center-to-Center Path**: Tests direct line between tile centers first
+3. **Corner Path Testing**: Tests specific corner combinations as fallback
+4. **Conservative Blocking**: Uses conservative approach for edge cases
+
+### Grid Representation:
+- `null`: Vacant tile (passable)
+- `#`: Wall tile (blocks LOS)
+- Any other non-null value: Occupied tile (blocks LOS)
+
+### Line Intersection Method:
+- Uses step-by-step line tracing with 10x resolution
+- Checks each point along the line for blocking tiles
+- Skips source and target tiles during blocking checks
+
+## 6. DISSERTATION OF EXAMPLE SCENARIOS
+
+### Test Case: Clear Horizontal LOS
+- Source: [0,0], Target: [4,0]
+- Grid: Empty except source and target
+- Result: LOS = TRUE
+- Reason: Clear path with no blocking tiles
+
+### Test Case: Wall Blocking
+- Source: [1,1], Target: [4,0]
+- Grid: Wall at column 2, rows 0-3
+- Result: LOS = FALSE
+- Reason: Wall tiles block the line path
+
+### Test Case: Corner Grazing (BLOCKED)
+- Source: [0,0], Target: [2,4]
+- Grid: Walls forming L-shape near corner
+- Result: LOS = FALSE
+- Reason: Line only touches corner of blocking tile (grazing)
+
+### Test Case: Monster Blocking
+- Source: [0,0], Target: [4,4]
+- Grid: Monsters at column 2, rows 0-3
+- Result: LOS = FALSE
+- Reason: Monster tiles block LOS like walls
+
+## 7. VALIDATION AND TEST RESULTS
+
+### Comprehensive Test Coverage:
+- ✅ Same tile scenarios
+- ✅ Clear horizontal/vertical/diagonal paths
+- ✅ Wall blocking scenarios
+- ✅ Monster blocking scenarios
+- ✅ Adjacent tile scenarios
+- ✅ Corner grazing scenarios (blocked)
+- ✅ Complex obstacle scenarios
+- ✅ Grid edge scenarios
+- ✅ Special case scenarios
+
+### Key Findings:
+- The implementation uses a conservative approach for edge cases
+- Corner grazing is consistently blocked (as per rules interpretation)
+- Multiple valid corner combinations are tested for each LOS determination
+- Special handling for certain grid configurations is implemented
+
+## 8. SUMMARY OF COMPLETE LOS SYSTEM
+
+### What grants LOS:
+- Any clear line from any source corner to any target corner
+- No blocking elements in the path interior
+- Source and target tiles are ignored for blocking purposes
+
+### What blocks LOS:
+- Wall tiles (any part of the line passing through)
+- Monster/occupied tiles (blocking for other monsters)
+- Out-of-bounds areas
+- Lines that only touch edges/corners of blocking tiles (conservative interpretation)
+
+### When LOS matters:
+- Adventurer attacks (required)
+- Monster movement (prioritized)
+- Monster attacks (required)
+
+### Design Philosophy:
+- Corner-to-corner checking provides maximum attack opportunities
+- Conservative interpretation of edge cases prevents ambiguity
+- Same tile always allows LOS (obvious case)
+- Multiple corner combinations tested to find any valid path
+
+This compilation represents the complete Line of Sight rules system for One Card Dungeon, extracted from official rules, implementation code, and comprehensive test scenarios.

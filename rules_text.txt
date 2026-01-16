@@ -1,0 +1,202 @@
+Designed by Barny Skinner, for 1 player, ages 10+
+One Card Dungeon is a solo dice-placement dungeon crawl played on a single card. Fight
+through 12 increasingly challenging levels to reach the final prize: the Sceptre of M’Guf-yn.
+
+COMPONENTS
+1 Dungeon card (front/back)
+1 Green dice Adventurer		
+2 Class cards (front/back)		
+
+4 Red dice Monster
+4 White dice Abilities
+1 Game Save Pad
+
+3 Black dice Energy
+1 Rules sheet
+
+DUNGEON CARD
+The Dungeon Card can be placed in four different positions to show different configurations
+of the Dungeon. The bottom of the card will always show the details of the Monsters in the
+current level.
+
+Monster Start
+Tiles (level 1)
+Adventurer
+Start Tile
+
+Wall
+
+Monster Health
+Monster Range
+Level’s Monster
+Dungeon Level
+
+Monster Defense
+Monster Attack
+Monster Speed
+
+SETUP
+A Place the Dungeon Card on the table with the Level Indicator for Level 1.
+B Place four dice just below the card under the Speed, Attack, Defense and Range icons,
+with Speed, Attack and Defense set to 1, and Range set to 2.
+These will track your Adventurer’s Abilities.
+
+C Place one die representing your Adventurer on the Stair tile closest to you, with a value
+of 6 showing, as you start the game with 6 Health. As your Health changes during the game,
+you will change the value shown on the dice.
+
+D Place dice representing Monsters on each of the
+tiles which have a 1 at the top left, with a value of 2
+showing on each dice, as the Spider Monsters on Level
+1 have 2 Health.
+You are ready to begin your descent into the Dungeon!
+
+GAMEPLAY
+A dungeon level is completed by looping through the
+phases listed below. The level ends when either you kill
+all of the monsters or you run out of health and lose.
+The Phases are:
+- Energy Phase
+- Adventurer Phase
+- Monster Movement Phase
+- Monster Attack Phase
+
+Energy Phase
+Roll the three Energy Dice together. Place one dice under each of your Speed, Attack and
+Defense abilities, with the rolled value showing. The Energy dice assigned is added to each
+Skill’s value to determine the total points for each skill this turn. For example, if you have
+Speed, Attack and Defense of 1 each and assign your rolls of 2, 5 and 2 respectively to
+those Skills, you will have total Speed, Attack and Defense values of 3, 6 and 3.
+No Energy dice are ever assigned to Range; it is always a fixed value.
+Your Total Speed, Attack and Defense points will be “spent” in the other Phases: you need
+to track how many you have left mentally.
+
+Adventurer Phase
+In the Adventurer Phase you will spend your total Speed and Attack points for the turn to
+move around and damage Monsters. You may make multiple Moves and Attacks during the
+Phase, in any order, as long as you have enough points to spend.
+
+Movement
+Moving one tile Orthogonally costs 2 Speed Points.
+Moving one tile Diagonally costs 3 Speed Points.
+You may not move onto the same tile as a Monster or onto a Wall.
+You do not have to spend all your Speed points, but may never spend more than your total
+for the turn.
+
+Attacks
+When Attacking a Monster, your Adventurer must be within Range and Line of Sight of the
+target. You may spend a number of Attack points equal to the Monster’s Defense Skill to reduce its health by one. Track each Monster’s Health by using the value of its die; if a Monster’s
+health is reduced to 0, remove its die.
+You do not have to spend all your Attack points, but may never spend more than your total
+for the turn.
+
+Range
+Range to a target is calculated in the same way
+as movement, therefore a Monster Orthogonally
+adjacent to you is at Range 2, one Diagonally
+adjacent is at Range 3 and so on. Calculate the
+shortest number of Movement points that you
+would need to spend to reach the Monster’s tile;
+that is the Range. Attacks may not be performed
+on Monsters further away than your Range. Your
+Adventurer begins the game with a Range of 2
+so may only attack orthogonally.
+
+Line of Sight
+If a line can be drawn from any corner of your tile to any corner of a Monster’s tile, without
+passing through a wall tile or another Monster’s tile, you have Line of Sight.
+
+Monster Movement Phase
+Each Monster will move to be as close as possible to being at maximum range to your
+Adventurer. Work through each monster in turn, starting with the closest. Find the empty tile
+at the Monster’s maximum Range from you (with Line of Sight) that is closest to the Monster.
+Move the Monster as fast as possible towards that tile. If there is no empty tile at maximum
+Range, they will move toward a closer in Range tile, or if that’s not possible just move to be as
+close as possible to the Adventurer. Monsters will prioritise being in Range and Line of Sight
+over being at maximum Range.
+Monsters move much like your Adventurer; moving Orthogonally costs 2 Speed, moving Diagonally 3. Monsters may not move through the Adventurer or Walls, but may move through
+(but not end movement on) other Monsters. If there is a choice of multiple movement paths
+that are equally good, you may choose which each Monster takes.
+Once all Monsters have moved, the phase ends.
+
+The top Monster uses all 5 Movement points to get into Range. The lower Monster can’t get into
+Range, but moves as fast as possible towards the closest Tile that is in Range.
+
+Monster Attack Phase
+Add up the total Attack of all Monsters within their Range and Line of Sight to the Adventurer. Monsters out of Range or Line of Sight do not Attack this turn.
+Inflict a number of points of damage to the Adventurer equal to the Monsters’ Total Attack
+divided by the Adventurer’s Total Defense Points, rounded down.
+For example, a total of 12 Attack vs Defense 7 would inflict 1 Damage, 12 Attack vs
+Defense 4 would inflict 3 Damage.
+If the Total Attack is less than your Adventurer’s Total Defense Points this turn, no damage is
+inflicted.
+Reduce your Adventurer’s Health by the damage inflicted; if the Adventurer hits zero health
+she has died and the game is over.
+Once Monsters have attacked, if your Adventurer has survived, begin a new turn with the
+Energy Phase.
+
+The Monsters have a Range of 3, so only one is in Range, for a Total Attack of 4, vs the Adventurer’s Total Defense of 3. Therefore the Adventurer loses 1 Health. If both Monsters had been in
+Range, the Total Attack of 8 vs Total Defense 3 would have inflicted two points of damage.
+
+END OF LEVEL
+Once your Adventurer has killed all Monsters in a level, she may take a moment to rest and
+recouperate before descending to the next Dungeon level; after each Dungeon level, you
+must choose to either increase one of your Skills (Movement, Attack, Defense or Range) by
+one, or to Heal the Adventurer back up to full (6) Health. You may either Heal or Upgrade
+after each Dungeon Level, but not both.
+
+THE NEXT DUNGEON LEVEL
+Set up the next level by flipping the card to have the next Dungeon Level Indicator (e.g.
+level 2 after completing level 1) at the bottom left, placing your Adventurer and the correct
+Monster Dice for that Dungeon level as marked on the card, and beginning a new turn in the
+Energy Phase.
+
+Level 2 set up: In this scenario the player chose to Upgrade Defense after completing the first
+level, having lost only one health she decided an Upgrade was more important than healing.
+
+WINNING THE GAME
+If you successfully kill all three Monsters on the 12th Dungeon level, you have won the game
+and found your ultimate prize: the Sceptre of M’Guf-yn which will give you ultimate power,
+the ability to save your village, a cure for the plague, slay your evil brother, whatever...
+
+GAME VARIANT
+Once you are comfortable with the game mechanics, you can try to adventure the Dungeon
+with one of these four character classes: Paladin, Barbarian, Ranger or Wizard.
+During the game setup, before delving into the Dungeon, choose one class. Each one of these
+gives you unique abilities you will be able to use throughout the game.
+
+Paladin
+Once per Dungeon Level you may leave one Energy Dice in place from last turn.
+
+Barbarian
+Once per turn, you may chooseto reroll all dice whenat 1 Health.
+
+Ranger
+Once per Dungeon Level you may assign a die to Range instead of Movement.
+
+Wizard
+Once per Dungeon Level you may reroll all Energy dice.
+
+GAME SAVE PAD
+Delving into the Dungeon can be exhausting. Only a handful of brave heroes can undertake
+this journey, which will put a strain on their mental strength. For this reason we included a
+Game Save pad where you can record your progress. At the beginning of each new level you
+can write your current Health points, Speed, Attack, Defense and Range.
+In this way you can take a break when you need it and continue where you left off.
+
+Little Rocket Games Team:
+Barny Skinner - development, graphic design
+Zemilio - art direction, production
+Marco Salogni - design, illustration, graphic design
+Giampaolo Razzino - project manager, production, administration
+Alessandra Canini - marketing, administration, logistics
+Chris Harrington - revision
+
+www.LittleRocketGames.com
+Produced and distributed by:
+Little Rocket Games
+Via Agostino Fausti 38/40 00062 Bracciano (RM) Italy
+© 2021 Little Rocket Games
+All rights reserved. Printed in China
+
+
