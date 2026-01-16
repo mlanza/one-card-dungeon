@@ -129,15 +129,15 @@ export function range(source, target, dungeon) {
 
 function cheapest(paths) {
   const distances = _.mapa(dist, paths);
-  const cheapest = _.min(...distances);
-  return _.reducekv(function (memo, idx, path) {
+  const cheapest = _.count(distances) ? _.min(...distances) : null;
+  return cheapest ? _.reducekv(function (memo, idx, path) {
     return _.get(distances, idx) === cheapest ? _.conj(memo, path) : memo;
-  }, [], paths);
+  }, [], paths) : null;
 }
 
 export function los(source, target, dungeon){
   const modified = blot([source, target], dungeon);
-  const cleared = clear(dungeon);
+  const cleared = bulldoze(dungeon);
   const [modified_paths, cleared_paths] = _.mapa(function(dungeon){
     return cheapest(paths(source, target, dungeon));
   }, [modified, cleared]);
@@ -146,9 +146,21 @@ export function los(source, target, dungeon){
   }, _));
 }
 
-function clear(dungeon){
+function bulldoze(dungeon){
   const [h, w] = dim(dungeon);
-  return _.toArray(_.repeat(h, _.toArray(_.repeat(w, null))));
+  return _.chain(
+    _.repeat(w, null),
+    _.toArray,
+    _.repeat(h, _),
+    _.toArray);
+}
+
+function clear(dungeon){
+  return _.mapa(function(row){
+    return _.mapa(function(content){
+      return _.isInt(content) ? null : content;
+    }, row);
+  }, dungeon);
 }
 
 export function moves(occupant) {
