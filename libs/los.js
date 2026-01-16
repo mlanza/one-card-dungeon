@@ -59,8 +59,6 @@ function getTilesAlongLine(p0, p1) {
   const dy = y1 - y0;
   
   const tiles = new Set();
-  
-  // Use higher precision for line traversal
   const steps = Math.max(Math.abs(dx), Math.abs(dy)) * 100;
   
   for (let i = 0; i <= steps; i++) {
@@ -68,10 +66,50 @@ function getTilesAlongLine(p0, p1) {
     const x = x0 + dx * t;
     const y = y0 + dy * t;
     
-    // Only include exact tile the line passes through
     const tileRow = Math.floor(y);
     const tileCol = Math.floor(x);
     tiles.add(`${tileRow},${tileCol}`);
+    
+    // Edge grazing detection - check if line touches tile edges
+    const xInTile = x - tileCol;
+    const yInTile = y - tileRow;
+    const epsilon = 0.001; // Small threshold for edge detection
+    
+    // Check if line touches any tile edge (conservative blocking)
+    if (xInTile < epsilon || xInTile > 1 - epsilon || 
+        yInTile < epsilon || yInTile > 1 - epsilon) {
+      
+      // If touching left edge and there's a tile to the left
+      if (xInTile < epsilon && tileCol > 0) {
+        tiles.add(`${tileRow},${tileCol - 1}`);
+      }
+      // If touching right edge and there's a tile to the right
+      if (xInTile > 1 - epsilon) {
+        tiles.add(`${tileRow},${tileCol + 1}`);
+      }
+      // If touching top edge and there's a tile above
+      if (yInTile < epsilon && tileRow > 0) {
+        tiles.add(`${tileRow - 1},${tileCol}`);
+      }
+      // If touching bottom edge and there's a tile below
+      if (yInTile > 1 - epsilon) {
+        tiles.add(`${tileRow + 1},${tileCol}`);
+      }
+      
+      // Corner touching - include diagonal neighbors
+      if (xInTile < epsilon && yInTile < epsilon && tileCol > 0 && tileRow > 0) {
+        tiles.add(`${tileRow - 1},${tileCol - 1}`);
+      }
+      if (xInTile > 1 - epsilon && yInTile < epsilon && tileRow > 0) {
+        tiles.add(`${tileRow - 1},${tileCol + 1}`);
+      }
+      if (xInTile < epsilon && yInTile > 1 - epsilon && tileCol > 0) {
+        tiles.add(`${tileRow + 1},${tileCol - 1}`);
+      }
+      if (xInTile > 1 - epsilon && yInTile > 1 - epsilon) {
+        tiles.add(`${tileRow + 1},${tileCol + 1}`);
+      }
+    }
   }
   
   // Convert Set back to array of [row, col] pairs

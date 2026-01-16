@@ -41,6 +41,7 @@ A line is considered BLOCKED if:
 1. It passes through the interior of any blocking tile
 2. It touches exactly on the edge or corner of any blocking tile
 3. **Key Insight**: Lines cannot pass between orthogonal obstacles (e.g., obstacles south and east block southeast diagonal)
+4. **CRITICAL**: Even a glancing touch or grazing contact with tile edges/corners is BLOCKED - no edge-tolerant paths allowed
 
 ---
 
