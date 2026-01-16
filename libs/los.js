@@ -60,21 +60,45 @@ function getTilesAlongLine(p0, p1) {
   
   const tiles = new Set();
   
-  // Use high precision for line traversal
-  const steps = Math.max(Math.abs(dx), Math.abs(dy)) * 100;
+  // Use moderate precision line traversal
+  const steps = Math.max(Math.abs(dx), Math.abs(dy)) * 30;
+  
+  if (steps === 0) {
+    return [];
+  }
   
   for (let i = 0; i <= steps; i++) {
     const t = i / steps;
     const x = x0 + dx * t;
     const y = y0 + dy * t;
     
-    // Only include exact tile the line passes through
     const tileRow = Math.floor(y);
     const tileCol = Math.floor(x);
-    tiles.add(`${tileRow},${tileCol}`);
+    
+    if (tileRow >= 0 && tileRow < 50 && tileCol >= 0 && tileCol < 50) {
+      tiles.add(`${tileRow},${tileCol}`);
+      
+      // Carefully tuned corner detection
+      const xInTile = x - tileCol;
+      const yInTile = y - tileRow;
+      const epsilon = 0.015; // Carefully chosen epsilon
+      
+      // Only add adjacent tiles when very close to boundaries
+      if (xInTile < epsilon && tileCol > 0) {
+        tiles.add(`${tileRow},${tileCol - 1}`);
+      }
+      if (xInTile > 1 - epsilon && tileCol < 49) {
+        tiles.add(`${tileRow},${tileCol + 1}`);
+      }
+      if (yInTile < epsilon && tileRow > 0) {
+        tiles.add(`${tileRow - 1},${tileCol}`);
+      }
+      if (yInTile > 1 - epsilon && tileRow < 49) {
+        tiles.add(`${tileRow + 1},${tileCol}`);
+      }
+    }
   }
   
-  // Convert Set back to array of [row, col] pairs
   return Array.from(tiles).map(key => {
     const [row, col] = key.split(',').map(Number);
     return [row, col];
@@ -82,19 +106,17 @@ function getTilesAlongLine(p0, p1) {
 }
 
 function isBlocking([row, col], grid) {
-  // Check bounds
   if (row < 0 || row >= grid.length || col < 0 || col >= grid[0].length) {
-    return true; // Out of bounds blocks LOS
+    return true;
   }
   
   const cell = grid[row][col];
-  // Wall blocks LOS
   if (cell === WALL) {
     return true;
   }
   
-  // Occupied tiles (non-null, non-WALL) block LOS
-  if (cell != null && cell !== WALL) {
+  // Non-null, non-zero cells block LOS (monsters, but not hero)
+  if (cell != null && cell !== 0) {
     return true;
   }
   
