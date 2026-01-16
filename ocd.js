@@ -7,6 +7,9 @@ const HERO = 0;
 export const H = HERO;
 export const X = WALL;
 
+const isHero = _.eq(HERO, _);
+const isMonster = _.notEq(HERO, _);
+
 export function level(level, h = hero()) {
   const m = monster("spider", 2, 5, 4, 4, 3);
   const _ = null;
@@ -253,22 +256,43 @@ function blot(targets, dungeon){
   return _.reduce(_.assocIn(_, _, null), dungeon, targets);
 }
 
-export function attacks(attacker) {
+export function canAttack(attacker, defender, state){
+  const {dungeon, occupants} = state;
+  const source = where(attacker, dungeon);
+  const target = where(defender, dungeon);
+  const range = _.chain(_.get(occupants, attacker), skill("range"));
+  const distance = _.chain(los(source, target, dungeon), _.first, dist);
+  const able = range && distance <= range;
+  return able ? {attacker, defender} : null;
+}
+
+function team(how, occupants){
+  return _.reducekv(function(memo, idx, occupant){
+    return how(idx) && occupant ? _.conj(memo, idx) : memo;
+  }, [], occupants);
+}
+
+function uniq(items, key){
+  return _.chain(items, _.mapa(_.get(_, key), _), _.set, _.toArray);
+}
+
+export function attacks(friend = isHero) {
+  const foe = _.complement(friend);
   return function (state) {
     const { occupants, dungeon } = state;
-    const range = _.chain(_.get(occupants, attacker), skill("range"));
-    const source = where(attacker, dungeon);
-    const targets = enemies(attacker, dungeon);
-    return _.chain(targets,
-      _.map(function(target){
-        const cost = _.chain(los(source, target, dungeon), _.first, dist);
-        const details = {attacker, target, cost};
-        const type = "attack";
-        return {type, details};
-      }, _),
-      _.filtera(function({details}){
-        return details.cost <= range;
-      }, _));
+    const friends = team(friend, occupants);
+    const foes = team(foe, occupants);
+    const attacks = _.chain(
+      _.braid(_.plug(canAttack, _, _, state), friends, foes),
+      _.compact,
+      _.toArray);
+    const attackers = uniq(attacks, "attacker");
+    const defenders = uniq(attacks, "defender");
+    const type = "attack";
+    return _.chain(defenders, _.mapa(function(defender){
+      const details = {attackers, defender};
+      return {type, details};
+    }, _), _.seq);
   }
 }
 
