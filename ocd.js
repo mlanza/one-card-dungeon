@@ -350,11 +350,20 @@ export function locations(monster, {dungeon, occupants}){
   const best = _.maybe(ranked, _.first, function({striking, maximum, sight}){
     return {striking, maximum, sight};
   });
-  const locations = _.chain(ranked, _.filtera(function({striking, maximum, sight}){
+  const dests = _.chain(ranked, _.filtera(function({striking, maximum, sight}){
     return _.eq({striking, maximum, sight}, best);
   }, _), _.mapa(_.get(_, "coord"), _));
-  return {monster, locations}
+  return {monster, dests}
 }
+
+export function render({dungeon}){
+  return _.chain(dungeon, _.mapa(function(row){
+    return _.str(..._.mapa(function(cell){
+      return cell == null ? "." : cell;
+    }, row));
+  }, _), _.join("\n", _));
+}
+
 
 export function attacks(friend = isHero) {
   const foe = _.complement(friend);

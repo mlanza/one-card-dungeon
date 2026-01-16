@@ -16,6 +16,8 @@ $.swap($state, o.assignEnergy("attack"));
 $.swap($state, o.assignEnergy("defense"));
 $.swap($state, o.teleport(1, [2, 0]));
 
+$.sub($state, _.comp(console.log, o.render));
+
 _.chain($state, _.deref, _.partial(o.locations, 1), console.log)
 
 //$.swap($state, o.move({type: "move", details: {occupant: o.H, offset: [-1, 0], speed: 2}}));
