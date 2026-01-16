@@ -40,7 +40,7 @@ function inBounds([row, col], size = [5, 5]) {
   return row > -1 && row < height && col > -1 && col < width;
 }
 
-export default function paths(source, target, grid) {
+export function paths(source, target, grid) {
   const grid_size = [grid.length, grid.length ? grid[0].length : 0];
 
   // If target is not vacant, find paths to adjacent positions instead
@@ -152,3 +152,5 @@ export default function paths(source, target, grid) {
 
   return Array.from(offsetPaths).map(p => JSON.parse(p));
 }
+
+export default paths;

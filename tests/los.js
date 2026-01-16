@@ -1,4 +1,5 @@
 import {
+  assert,
   assertEquals,
 } from "https://deno.land/std@0.177.0/testing/asserts.ts";
 import { los, X, H } from "../ocd.js";
@@ -21,7 +22,7 @@ Deno.test("LOS - BGG A: clear diagonal LOS", () => {
     [_, X, X, _, _],
     [_, 2, _, _, 3]
   ];
-  assertEquals(los([2, 2], [0, 0], grid), true);
+  assert(!!los([2, 2], [0, 0], grid));
 });
 
 Deno.test("LOS - BGG B: no LoS due to wall", () => {
@@ -33,19 +34,18 @@ Deno.test("LOS - BGG B: no LoS due to wall", () => {
     [_, X, X, _, _],
     [_, 2, _, _, 3]
   ];
-  assertEquals(los([2, 2], [4, 1], grid), false);
+  assert(!los([2, 2], [4, 1], grid));
 });
 
 Deno.test("LOS - BGG C: LoS due to monster", () => {
   // A to C: Monster blocks LOS to B
-  const grid = [
+  assert(!los([2, 2], [2, 0], [
     [0, X, _, _, 4],
     [_, _, _, X, _],
     [1, X, H, X, _],
     [_, X, X, _, _],
     [_, 2, _, _, 3]
-  ];
-  assertEquals(los([2, 2], [2, 0], grid), false);
+  ]));
 });
 
 Deno.test("LOS - BGG D: corner squeeze", () => {
@@ -57,7 +57,7 @@ Deno.test("LOS - BGG D: corner squeeze", () => {
     [_, X, X, _, _],
     [_, 2, _, _, 3]
   ];
-  assertEquals(los([2, 2], [4, 4], grid), false);
+  assert(!!los([2, 2], [4, 4], grid));
 });
 
 Deno.test("LOS - BGG E: edge grazing", () => {
@@ -69,7 +69,7 @@ Deno.test("LOS - BGG E: edge grazing", () => {
     [_, X, X, _, _],
     [_, 2, _, _, 3]
   ];
-  assertEquals(los([2, 2], [0, 4], grid), false);
+  assert(!los([2, 2], [0, 4], grid));
 });
 
 Deno.test("LOS - same tile should have LOS", () => {
@@ -80,7 +80,7 @@ Deno.test("LOS - same tile should have LOS", () => {
     [_, _, _, _, _],
     [H, _, _, _, _]
   ];
-  assertEquals(los([0, 4], [0, 4], grid), true);
+  assert(!!los([0, 4], [0, 4], grid));
 });
 
 Deno.test("LOS - clear horizontal line of sight", () => {
@@ -91,7 +91,7 @@ Deno.test("LOS - clear horizontal line of sight", () => {
     [_, _, _, _, _],
     [_, _, _, _, _]
   ];
-  assertEquals(los([0, 0], [4, 0], grid), true);
+  assert(!!los([0, 0], [4, 0], grid));
 });
 
 Deno.test("LOS - clear vertical line of sight", () => {
@@ -102,7 +102,7 @@ Deno.test("LOS - clear vertical line of sight", () => {
     [_, _, _, _, _],
     [1, _, _, _, _]
   ];
-  assertEquals(los([0, 0], [0, 4], grid), true);
+  assert(!!los([0, 0], [0, 4], grid));
 });
 
 Deno.test("LOS - clear diagonal line of sight", () => {
@@ -113,7 +113,7 @@ Deno.test("LOS - clear diagonal line of sight", () => {
     [_, _, _, _, _],
     [_, _, _, _, 1]
   ];
-  assertEquals(los([0, 0], [4, 4], grid), true);
+  assert(!!los([0, 0], [4, 4], grid));
 });
 
 Deno.test("LOS - wall blocking horizontal LOS", () => {
@@ -124,7 +124,7 @@ Deno.test("LOS - wall blocking horizontal LOS", () => {
     [_, _, X, _, _],
     [_, _, _, _, _]
   ];
-  assertEquals(los([1, 1], [4, 0], grid), false);
+  assert(!los([1, 1], [4, 0], grid));
 });
 
 Deno.test("LOS - wall blocking vertical LOS", () => {
@@ -138,7 +138,7 @@ Deno.test("LOS - wall blocking vertical LOS", () => {
     [_, _, X, _, _],
     [_, _, _, _, _]
   ];
-  assertEquals(los([0, 0], [0, 4], grid), false);
+  assert(!los([0, 0], [0, 4], grid));
 });
 
 Deno.test("LOS - monster blocking line of sight", () => {
@@ -149,7 +149,7 @@ Deno.test("LOS - monster blocking line of sight", () => {
     [_, _, 1, _, _],
     [_, _, _, _, 2]
   ];
-  assertEquals(los([0, 0], [4, 4], grid), false);
+  assert(!los([0, 0], [4, 4], grid));
 });
 
 Deno.test("LOS - adjacent orthogonal tiles", () => {
@@ -160,7 +160,7 @@ Deno.test("LOS - adjacent orthogonal tiles", () => {
     [_, _, _, _, _],
     [_, _, 1, _, _]
   ];
-  assertEquals(los([0, 0], [2, 4], grid), true);
+  assert(!!los([0, 0], [2, 4], grid));
 });
 
 Deno.test("LOS - adjacent diagonal tiles", () => {
@@ -171,7 +171,7 @@ Deno.test("LOS - adjacent diagonal tiles", () => {
     [_, _, _, _, _],
     [_, _, _, 1, _]
   ];
-  assertEquals(los([0, 0], [3, 4], grid), true);
+  assert(!!los([0, 0], [3, 4], grid));
 });
 
 Deno.test("LOS - corner touching should be blocked", () => {
@@ -182,7 +182,7 @@ Deno.test("LOS - corner touching should be blocked", () => {
     [_, _, _, _, _],
     [_, _, 1, _, _]
   ];
-  assertEquals(los([0, 0], [2, 4], grid), false);
+  assert(!los([0, 0], [2, 4], grid));
 });
 
 Deno.test("LOS - grazing corner should be blocked", () => {
@@ -193,7 +193,7 @@ Deno.test("LOS - grazing corner should be blocked", () => {
     [_, _, _, _, _],
     [_, _, _, 1, _]
   ];
-  assertEquals(los([0, 0], [3, 4], grid), false);
+  assert(!los([0, 0], [3, 4], grid));
 });
 
 Deno.test("LOS - clear path around obstacle", () => {
@@ -204,7 +204,7 @@ Deno.test("LOS - clear path around obstacle", () => {
     [_, _, _, _, _],
     [_, _, _, _, _]
   ];
-  assertEquals(los([0, 0], [1, 3], grid), true);
+  assert(!!los([0, 0], [1, 3], grid));
 });
 
 Deno.test("LOS - complex obstacle scenario", () => {
@@ -215,7 +215,7 @@ Deno.test("LOS - complex obstacle scenario", () => {
     [_, _, _, _, _],
     [_, 3, _, _, _]
   ];
-  assertEquals(los([0, 0], [4, 1], grid), true);
+  assert(!!los([0, 0], [4, 1], grid));
 });
 
 Deno.test("LOS - complex scenario blocked path", () => {
@@ -226,7 +226,7 @@ Deno.test("LOS - complex scenario blocked path", () => {
     [_, _, _, _, _],
     [_, 3, _, _, _]
   ];
-  assertEquals(los([0, 1], [4, 1], grid), false);
+  assert(!los([0, 1], [4, 1], grid));
 });
 
 Deno.test("LOS - source at grid edge", () => {
@@ -237,7 +237,7 @@ Deno.test("LOS - source at grid edge", () => {
     [_, _, _, _, _],
     [_, _, _, _, _]
   ];
-  assertEquals(los([0, 0], [2, 2], grid), true);
+  assert(!!los([0, 0], [2, 2], grid));
 });
 
 Deno.test("LOS - target at grid edge", () => {
@@ -248,7 +248,7 @@ Deno.test("LOS - target at grid edge", () => {
     [_, _, _, _, _],
     [_, _, _, _, _]
   ];
-  assertEquals(los([2, 2], [0, 0], grid), true);
+  assert(!!los([2, 2], [0, 0], grid));
 });
 
 Deno.test("LOS - wall between adjacent tiles", () => {
@@ -257,7 +257,7 @@ Deno.test("LOS - wall between adjacent tiles", () => {
     [_, _, _],
     [_, _, _]
   ];
-  assertEquals(los([0, 0], [0, 2], grid), false);
+  assert(!los([0, 0], [0, 2], grid));
 });
 
 Deno.test("LOS - occupied source tile", () => {
@@ -266,7 +266,7 @@ Deno.test("LOS - occupied source tile", () => {
     [_, _, _],
     [_, _, 1]
   ];
-  assertEquals(los([0, 0], [2, 2], grid), true);
+  assert(!!los([0, 0], [2, 2], grid));
 });
 
 Deno.test("LOS - user scenario should not have LOS", () => {
@@ -277,7 +277,7 @@ Deno.test("LOS - user scenario should not have LOS", () => {
     [_, X, _, X, _],
     [0, _, _, _, _]
   ];
-  assertEquals(los([4, 0], [0, 3], grid), true);
+  assert(!!los([4, 0], [0, 3], grid));
 });
 
 Deno.test("LOS - user scenario should have LOS", () => {
@@ -288,5 +288,5 @@ Deno.test("LOS - user scenario should have LOS", () => {
     [0, X, _, X, _],
     [_, _, _, _, _]
   ];
-  assertEquals(los([3, 0], [0, 3], grid), true);
+  assert(!!los([3, 0], [0, 3], grid));
 });
