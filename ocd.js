@@ -136,14 +136,13 @@ function cheapest(paths) {
 }
 
 export function los(source, target, dungeon){
+  if (_.eq(source, target)) return [[0, 0]];
   const modified = blot([source, target], dungeon);
   const cleared = bulldoze(dungeon);
-  const [modified_paths, cleared_paths] = _.mapa(function(dungeon){
-    return cheapest(paths(source, target, dungeon));
-  }, [modified, cleared]);
-  return _.chain(cleared_paths, _.detect(function(path){
-    return _.detect(_.eq(path, _), modified_paths);
-  }, _));
+  const cost = _.chain(paths(source, target, cleared), cheapest, _.first, dist);
+  return _.chain(paths(source, target, modified), _.filtera(function(path){
+    return dist(path) <= cost;
+  }, _), _.seq);
 }
 
 function bulldoze(dungeon){

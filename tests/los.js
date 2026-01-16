@@ -56,7 +56,7 @@ Deno.test("LOS - BGG D: corner squeeze", () => {
     [1, X, H, X, v],
     [v, X, X, v, v],
     [v, 2, v, v, 3]
-  ]), _.not, _.not, assert);
+  ]), _.not, assert);
 });
 
 Deno.test("LOS - BGG E: edge grazing", () => {
@@ -71,7 +71,7 @@ Deno.test("LOS - BGG E: edge grazing", () => {
 });
 
 Deno.test("LOS - same tile should have LOS", () => {
-  _.chain(los([0, 4], [0, 4], [
+  _.chain(los([4, 0], [4, 0], [
     [v, v, v, v, v],
     [v, v, v, v, v],
     [v, v, v, v, v],
@@ -111,7 +111,7 @@ Deno.test("LOS - clear diagonal line of sight", () => {
 });
 
 Deno.test("LOS - wall blocking horizontal LOS", () => {
-  _.chain(los([1, 1], [4, 0], [
+  _.chain(los([1, 0], [0, 4], [
     [v, v, X, v, 1],
     [H, v, X, v, v],
     [v, v, X, v, v],
@@ -164,7 +164,7 @@ Deno.test("LOS - adjacent diagonal tiles", () => {
 });
 
 Deno.test("LOS - corner touching should be blocked", () => {
-  _.chain(los([0, 0], [2, 4], [
+  _.chain(los([0, 0], [4, 2], [
     [H, v, v, v, v],
     [v, X, X, v, v],
     [v, X, v, v, v],

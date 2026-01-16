@@ -16,10 +16,10 @@ $.swap($state, o.assignEnergy("attack"));
 $.swap($state, o.assignEnergy("defense"));
 //$.swap($state, o.move({type: "move", details: {occupant: o.H, offset: [-1, 0], speed: 2}}));
 
-_.chain(los([2, 2], [2, 0], [
-  [0, X, v, v, 4],
-  [v, v, v, X, v],
-  [1, X, H, X, v],
+_.chain(los([0, 0], [4, 2], [
+  [H, v, v, v, v],
   [v, X, X, v, v],
-  [v, 2, v, v, 3]
-]), $.see("HERE"));
+  [v, X, v, v, v],
+  [v, v, v, v, v],
+  [v, v, 1, v, v]
+]), $.see("HI"), _.not);
