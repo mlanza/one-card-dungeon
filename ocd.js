@@ -225,7 +225,7 @@ export function move(details) {
   }
 }
 
-export function attack({details}){
+export function attack(details){
   return function(state){
     return state;
   }
