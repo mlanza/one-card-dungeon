@@ -207,7 +207,7 @@ export function moves(occupant) {
   };
 }
 
-export function move({details}) {
+export function move(details) {
   const { occupant, offset, speed } = details;
   return function (state) {
     const found = _.chain(state,
@@ -276,7 +276,7 @@ export function adventure(command){
   const actions = {move, attack};
   const {type, details} = command;
   const action = _.get(actions, type);
-  return action(command);
+  return action(details);
 }
 
 export const adventures = _.comp(_.toArray, _.spread(_.concat), _.juxt(attacks(HERO), moves(HERO)));
