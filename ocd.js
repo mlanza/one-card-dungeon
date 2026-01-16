@@ -139,7 +139,7 @@ export function los(source, target, dungeon){
   const modified = blot([source, target], dungeon);
   const cleared = clear(dungeon);
   const [modified_paths, cleared_paths] = _.mapa(function(dungeon){
-    return paths(source, target, dungeon);
+    return cheapest(paths(source, target, dungeon));
   }, [modified, cleared]);
   return _.chain(cleared_paths, _.detect(function(path){
     return _.detect(_.eq(path, _), modified_paths);
