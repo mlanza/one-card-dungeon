@@ -1,4 +1,4 @@
-# Line of Sight - Research Master File
+# Line of Sight Research Master File
 
 ## Purpose
 This file consolidates all LOS research and points to the definitive specification for implementation.
@@ -34,27 +34,27 @@ This file contains:
 2. `ONE_CARD_DUNGEON_LOS_RESEARCH.md` - BGG forum research results  
 3. `LOS_TECHNICAL_SPECIFICATION.md` - Mathematical model (integrated into main spec)
 
-## 🎯 NEXT AGENT IMPLEMENTATION GUIDE
+## Next Agent Implementation Guide
 
-**IMPLEMENT HERE**: `specs/los.md` - This is the ONLY file needed for implementation.
+**Implement here**: `specs/los.md` - This is the only file needed for implementation.
 
-### Why This File is Complete:
-✅ **Mathematical Foundation**: Precise coordinate definitions and line algorithms  
-✅ **Implementation-Ready Code**: Complete pseudocode with function signatures  
-✅ **All Scenarios Covered**: Clear paths, blocking, edge cases, complex situations  
-✅ **Key Insight Included**: Orthogonal blocking (south+east blocks southeast)  
-✅ **Conservative Rules**: Edge grazing properly handled with epsilon buffers  
-✅ **Performance Optimized**: Early exit conditions and spatial optimizations  
-✅ **Comprehensive Tests**: Validation cases for every LOS situation  
+### Why this file is complete:
+- **Mathematical Foundation**: Precise coordinate definitions and line algorithms  
+- **Implementation-Ready Code**: Complete pseudocode with function signatures  
+- **All Scenarios Covered**: Clear paths, blocking, edge cases, complex situations  
+- **Key Insight Included**: Orthogonal blocking (south+east blocks southeast)  
+- **Conservative Rules**: Edge grazing properly handled with epsilon buffers  
+- **Performance Optimized**: Early exit conditions and spatial optimizations  
+- **Comprehensive Tests**: Validation cases for every LOS situation  
 
-### Implementation Path:
+### Implementation path:
 1. **Copy algorithms from `specs/los.md`** directly into code
 2. **Follow the pseudocode exactly** - it's mathematically proven
 3. **Use the provided test cases** for validation
 4. **Reference this master file** only for research context if needed
 
-**🚫 DO NOT**: Look for other research files (they've been consolidated)
-**✅ DO**: Implement directly from `specs/los.md`
+**Do not**: Look for other research files (they've been consolidated)
+**Do**: Implement directly from `specs/los.md`
 
 ## Quick Implementation Checklist
 
