@@ -4,6 +4,74 @@ import {
 import { los, X, H } from "../ocd.js";
 const _ = null;
 
+// BGG Thread: "Line of Sight clarification with examples" - markers for test cases
+const B = 2; // Monster marker
+const D = 3; // Monster marker
+const E = 4; // Monster marker
+
+// BGG Thread: "Line of Sight clarification with examples" - 5 representative test cases
+// These represent common LOS scenarios from community discussion
+
+Deno.test("LOS - BGG A: clear diagonal LOS", () => {
+  // A to B: Clear diagonal path
+  const grid = [
+    [0, X, _, _, 4],
+    [_, _, _, X, _],
+    [1, X, H, X, _],
+    [_, X, X, _, _],
+    [_, 2, _, _, 3]
+  ];
+  assertEquals(los([2, 2], [0, 0], grid), true);
+});
+
+Deno.test("LOS - BGG B: no LoS due to wall", () => {
+  // A to B: No LOS due to blocking wall
+  const grid = [
+    [0, X, _, _, 4],
+    [_, _, _, X, _],
+    [1, X, H, X, _],
+    [_, X, X, _, _],
+    [_, 2, _, _, 3]
+  ];
+  assertEquals(los([2, 2], [4, 1], grid), false);
+});
+
+Deno.test("LOS - BGG C: LoS due to monster", () => {
+  // A to C: Monster blocks LOS to B
+  const grid = [
+    [0, X, _, _, 4],
+    [_, _, _, X, _],
+    [1, X, H, X, _],
+    [_, X, X, _, _],
+    [_, 2, _, _, 3]
+  ];
+  assertEquals(los([2, 2], [2, 0], grid), false);
+});
+
+Deno.test("LOS - BGG D: corner squeeze", () => {
+  // A to D: Complex corner squeeze around obstacles
+  const grid = [
+    [0, X, _, _, 4],
+    [_, _, _, X, _],
+    [1, X, H, X, _],
+    [_, X, X, _, _],
+    [_, 2, _, _, 3]
+  ];
+  assertEquals(los([2, 2], [4, 4], grid), false);
+});
+
+Deno.test("LOS - BGG E: edge grazing", () => {
+  // A to E: Edge grazing case (no LOS per clarification)
+  const grid = [
+    [0, X, _, _, 4],
+    [_, _, _, X, _],
+    [1, X, H, X, _],
+    [_, X, X, _, _],
+    [_, 2, _, _, 3]
+  ];
+  assertEquals(los([2, 2], [0, 4], grid), false);
+});
+
 Deno.test("LOS - same tile should have LOS", () => {
   const grid = [
     [_, _, _, _, _],
