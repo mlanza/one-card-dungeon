@@ -302,6 +302,19 @@ function vacated(dungeon){
   }, [], dungeon);
 }
 
+export function teleport(occupant, coord){ //for testing purposes
+  return function(state){
+    const {dungeon} = state;
+    const target = where(occupant, dungeon);
+    if (!target) {
+      throw new Error("Occupant not found in dungeon.");
+    }
+    return _.chain(state,
+      _.assocIn(_, ["dungeon", ...target], null),
+      _.assocIn(_, ["dungeon", ...coord], occupant));
+  }
+}
+
 export function locations(monster, {dungeon, occupants}){
   const target = where(HERO, dungeon);
   const source = where(monster, dungeon);
@@ -314,7 +327,8 @@ export function locations(monster, {dungeon, occupants}){
       const gap = range(coord, target, modified);
       const distance  = range(source, coord, modified);
       const striking = gap <= rng;
-      return {coord, distance, gap, striking};
+      const sight = los(coord, target, modified);
+      return {coord, distance, gap, striking, sight};
     }, _),
     _.filtera(function({distance}){
       return distance <= speed;
