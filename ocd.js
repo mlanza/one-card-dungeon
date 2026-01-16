@@ -140,9 +140,40 @@ export function los(source, target, dungeon){
   const modified = blot([source, target], dungeon);
   const cleared = bulldoze(dungeon);
   const cost = _.chain(paths(source, target, cleared), cheapest, _.first, dist);
-  return _.chain(paths(source, target, modified), _.filtera(function(path){
-    return dist(path) <= cost;
-  }, _), _.seq);
+  return _.chain(
+    paths(source, target, modified),
+    _.filter(_.comp(_.lte(_, cost), dist), _),
+    _.remove(hasHardHook, _),
+    _.toArray,
+    _.seq);
+}
+
+function hasHardHook(path) {
+  if (path.length <= 3) return false;
+
+  // Look for the specific pattern: consecutive orthogonal moves (>=2)
+  // followed immediately by diagonal moves (>=1) with no mixing
+  let i = 0;
+  while (i < path.length - 1) {
+    // Find consecutive orthogonal moves
+    let orthogonalCount = 0;
+    while (i < path.length && Math.abs(path[i][0]) + Math.abs(path[i][1]) === 1) {
+      orthogonalCount++;
+      i++;
+    }
+
+    // If we found >=2 orthogonal moves and next move is diagonal, that's a hard hook
+    if (orthogonalCount >= 2 && i < path.length && Math.abs(path[i][0]) + Math.abs(path[i][1]) === 2) {
+      return true;
+    }
+
+    // Skip diagonal moves
+    while (i < path.length && Math.abs(path[i][0]) + Math.abs(path[i][1]) === 2) {
+      i++;
+    }
+  }
+
+  return false;
 }
 
 function bulldoze(dungeon){

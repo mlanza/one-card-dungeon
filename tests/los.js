@@ -163,7 +163,7 @@ Deno.test("LOS - adjacent diagonal tiles", () => {
   ]), _.not, _.not, assert);
 });
 
-Deno.test("LOS - corner touching should be blocked", () => {
+Deno.test("LOS - corner touching should be blocked", () => { //kangaroo
   _.chain(los([0, 0], [4, 2], [
     [H, v, v, v, v],
     [v, X, X, v, v],
