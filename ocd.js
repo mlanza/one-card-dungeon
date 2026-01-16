@@ -350,10 +350,9 @@ export function locations(monster, {dungeon, occupants}){
   const best = _.maybe(ranked, _.first, function({striking, maximum, sight}){
     return {striking, maximum, sight};
   });
-  const selected = _.filtera(function({striking, maximum, sight}){
+  const locations = _.chain(ranked, _.filtera(function({striking, maximum, sight}){
     return _.eq({striking, maximum, sight}, best);
-  }, ranked);
-  const locations = _.mapa(_.get(_, "coord"), selected);
+  }, _), _.mapa(_.get(_, "coord"), _));
   return {monster, locations}
 }
 
