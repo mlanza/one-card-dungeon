@@ -48,7 +48,7 @@ Deno.test("LOS - clear diagonal line of sight", () => {
   assertEquals(los([0, 0], [4, 4], grid), true);
 });
 
-Deno.test("LOS - wall blocking horizontal LOS", () => {
+Deno.test("LOS - wall blocking horizontal LOS", () => { //TODO review
   const grid = [
     [_, _, X, _, 1],
     [H, _, X, _, _],
@@ -59,7 +59,7 @@ Deno.test("LOS - wall blocking horizontal LOS", () => {
   assertEquals(los([1, 1], [4, 0], grid), false);
 });
 
-Deno.test("LOS - wall blocking vertical LOS", () => {
+Deno.test("LOS - wall blocking vertical LOS", () => { //TODO review
   const grid = [
     [H, _, X, _, _],
     [_, _, X, _, _],
@@ -180,7 +180,7 @@ Deno.test("LOS - target at grid edge", () => {
   assertEquals(los([2, 2], [0, 0], grid), true);
 });
 
-Deno.test("LOS - wall between adjacent tiles", () => {
+Deno.test("LOS - wall between adjacent tiles", () => { //TODO review
   const grid = [
     [H, X, 1],
     [_, _, _],
