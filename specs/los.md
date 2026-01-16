@@ -1,5 +1,7 @@
 # Line of Sight Specification
 
+The [game rules](../OCD_rules_ENG.pdf) say most of what is important; however, BGG has some nuanced responses about the LOS rules in the [OCD rules forum](https://boardgamegeek.com/boardgame/319263/one-card-dungeon/forums/66).
+
 ## Function Signature
 ```javascript
 function los(source, target, grid) // returns boolean
