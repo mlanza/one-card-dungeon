@@ -1,8 +1,8 @@
 import { assert, assertEquals } from "jsr:@std/assert";
-import _ from "./libs/atomic_/core.js";
-import $ from "./libs/atomic_/shell.js";
-import * as eff from "./libs/effects.js";
-import * as o from "./ocd.js";
+import _ from "../libs/atomic_/core.js";
+import $ from "../libs/atomic_/shell.js";
+import * as eff from "../libs/effects.js";
+import * as o from "../ocd.js";
 
 let n = 0;
 

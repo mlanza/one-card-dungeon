@@ -1,7 +1,7 @@
 import {
   assertEquals,
 } from "https://deno.land/std@0.177.0/testing/asserts.ts";
-import { paths } from "./ocd.js";
+import { paths } from "../ocd.js";
 
 Deno.test("pathfinding - finds the shortest path to a target square", () => {
   const grid = [
@@ -86,7 +86,7 @@ Deno.test("pathfinding - user scenario with diagonal choice", () => {
     const expected = [
         [[1, -1], [1, -1]]
     ];
-    
+
     assertEquals(result, expected);
 });
 
