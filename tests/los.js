@@ -4,6 +4,7 @@ import {
 } from "https://deno.land/std@0.177.0/testing/asserts.ts";
 import { los, X, H } from "../ocd.js";
 import _ from "../libs/atomic_/core.js";
+import $ from "../libs/atomic_/shell.js";
 const o = null; //open
 
 // BGG Thread: "Line of Sight clarification with examples" - markers for test cases
@@ -33,7 +34,7 @@ Deno.test("LOS - BGG B: no LoS due to wall", () => {
     [1, X, H, X, o],
     [o, X, X, o, o],
     [o, 2, o, o, 3]
-  ]), _.not, assert);
+  ]), $.see("B"), _.not, assert);
 });
 
 Deno.test("LOS - BGG C: LoS due to monster", () => {
