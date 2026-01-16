@@ -133,12 +133,12 @@ function cheapest(paths) {
 
 export function los(source, target, dungeon){
   if (_.eq(source, target)) return [[0, 0]];
-  const modified = blot([source, target], dungeon);
+  const modified = without(dungeon, source, target);
   const cleared = bulldoze(dungeon);
-  const cost = _.chain(paths(source, target, cleared), cheapest, _.first, dist);
+  const distance = range(source, target, cleared);
   return _.chain(
     paths(source, target, modified),
-    _.filter(_.comp(_.lte(_, cost), dist), _),
+    _.filter(_.comp(_.lte(_, distance), dist), _),
     _.remove(hasHardHook, _),
     _.toArray,
     _.seq);
@@ -245,7 +245,7 @@ export function enemies(attacker, dungeon) {
   }, [], dungeon);
 }
 
-function blot(targets, dungeon){
+function without(dungeon, ...targets){
   return _.reduce(_.assocIn(_, _, null), dungeon, targets);
 }
 
@@ -269,18 +269,62 @@ function uniq(items, key){
   return _.chain(items, _.mapa(_.get(_, key), _), _.set, _.toArray);
 }
 
+export function range(source, target, dungeon){
+  return _.chain(paths(source, target, dungeon), cheapest, _.first, dist);
+}
+
+export function tst(dungeon){
+  return paths([3,0], [4,0], dungeon);
+
+  const res = range([3,0], [4,0], dungeon);
+  debugger
+  return res;
+}
+
 export function closestMonsters(state){
   const {occupants, dungeon} = state;
   const monsters = team(isMonster, occupants);
   const target = where(HERO, dungeon);
   const stats = _.mapa(function(monster){
     const source = where(monster, dungeon);
-    const distance = _.chain(paths(source, target, dungeon), cheapest, _.first, dist);
+    const distance = range(source, target, dungeon);
     return {distance, monster};
   }, monsters);
-  debugger
   const distance = _.chain(stats, _.mapa(_.get(_, "distance"), _), _.spread(_.min));
   return _.chain(stats, _.filter(_.comp(_.eq(distance, _), _.get(_, "distance")), _), _.mapa(_.get(_, "monster"), _));
+}
+
+function vacated(dungeon){
+  return _.reducekv(function(memo, r, row){
+    return _.reducekv(function(memo, c, contents){
+      return contents == null ? _.conj(memo, [r, c]) : memo;
+    }, memo, row);
+  }, [], dungeon);
+}
+
+export function locations(monster, {dungeon, occupants}){
+  const target = where(HERO, dungeon);
+  const source = where(monster, dungeon);
+  const aggressor = _.chain(occupants, _.get(_, monster));
+  const rng = _.chain(aggressor, skill("range"));
+  const speed = _.chain(aggressor, skill("speed"));
+  const modified = without(dungeon, target, source);
+  const locations = _.chain(dungeon, vacated,
+    _.mapa(function(coord){
+      const gap = range(coord, target, modified);
+      const distance  = range(source, coord, modified);
+      const striking = gap <= rng;
+      return {coord, distance, gap, striking};
+    }, _),
+    _.filtera(function({distance}){
+      return distance <= speed;
+    }, _),
+    _.sortBy(_.get(_, "gap"), _));
+  return {target, monster, locations}
+}
+
+function vacantsAtRange(distance, target = HERO){
+
 }
 
 export function attacks(friend = isHero) {
