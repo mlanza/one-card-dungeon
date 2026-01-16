@@ -269,6 +269,20 @@ function uniq(items, key){
   return _.chain(items, _.mapa(_.get(_, key), _), _.set, _.toArray);
 }
 
+export function closestMonsters(state){
+  const {occupants, dungeon} = state;
+  const monsters = team(isMonster, occupants);
+  const target = where(HERO, dungeon);
+  const stats = _.mapa(function(monster){
+    const source = where(monster, dungeon);
+    const distance = _.chain(paths(source, target, dungeon), cheapest, _.first, dist);
+    return {distance, monster};
+  }, monsters);
+  debugger
+  const distance = _.chain(stats, _.mapa(_.get(_, "distance"), _), _.spread(_.min));
+  return _.chain(stats, _.filter(_.comp(_.eq(distance, _), _.get(_, "distance")), _), _.mapa(_.get(_, "monster"), _));
+}
+
 export function attacks(friend = isHero) {
   const foe = _.complement(friend);
   return function (state) {
