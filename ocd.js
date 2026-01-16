@@ -364,7 +364,6 @@ export function render({dungeon}){
   }, _), _.join("\n", _));
 }
 
-
 export function attacks(friend = isHero) {
   const foe = _.complement(friend);
   return function (state) {
