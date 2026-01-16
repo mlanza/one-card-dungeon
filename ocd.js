@@ -123,13 +123,6 @@ function dist(path) {
   }, 0, path);
 }
 
-export function range(source, target, dungeon) {
-  return _.chain(paths(source, target, _.assocIn(dungeon, [target], null)), //vacating target includes target location
-    cheapest,
-    _.first,
-    dist);
-}
-
 function cheapest(paths) {
   const distances = _.mapa(dist, paths);
   const cheapest = _.count(distances) ? _.min(...distances) : null;
