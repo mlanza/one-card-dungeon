@@ -297,7 +297,7 @@ export function teleport(occupant, coord){ //for testing purposes
   }
 }
 
-export function locations(monster, {dungeon, occupants}){
+export function aggress(monster, {dungeon, occupants}){
   const target = where(HERO, dungeon);
   const source = where(monster, dungeon);
   const aggressor = _.chain(occupants, _.get(_, monster));
