@@ -391,7 +391,7 @@ export function adventure(command){
   return action(details);
 }
 
-export const adventures = _.comp(_.toArray, _.spread(_.concat), _.juxt(attacks(HERO), moves(HERO)));
+export const adventures = _.comp(_.toArray, _.spread(_.concat), _.juxt(attacks(), moves(HERO)));
 
 function dim(grid){
   const height = _.count(grid);
