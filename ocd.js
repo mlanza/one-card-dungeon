@@ -352,7 +352,7 @@ export function canAttack(attacker, defender, state){
   const target = where(defender, dungeon);
   const range = _.chain(_.get(occupants, attacker), skill("range"));
   const distance = _.chain(los(source, target, dungeon), _.first, dist);
-  const able = distance && range && distance <= range;
+  const able = distance && distance <= range;
   return able ? {attacker, defender, range, distance} : null;
 }
 
