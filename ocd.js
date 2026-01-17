@@ -297,7 +297,21 @@ export function teleport(occupant, coord){ //for testing purposes
   }
 }
 
-export function aggress(monster, {dungeon, occupants}){
+export function aggressions(state){
+  const {dungeon} = state;
+  const monsters = closestMonsters(state);
+  return _.toArray(_.mapcat(function(occupant){
+    const source = where(occupant, dungeon);
+    return _.chain(aggresses(occupant, state), _.get(_, "dests"), _.map(function(dest){
+      const route = _.first(paths(source, dest, dungeon));
+      const type = "aggress";
+      const details = {occupant, route, dest};
+      return {type, details};
+    }, _));
+  }, monsters));
+}
+
+export function aggresses(monster, {dungeon, occupants}){
   const target = where(HERO, dungeon);
   const source = where(monster, dungeon);
   const aggressor = _.chain(occupants, _.get(_, monster));
