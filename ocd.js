@@ -305,7 +305,7 @@ export function aggressions(state){
     return _.chain(aggresses(occupant, state), _.get(_, "dests"), _.map(function(dest){
       const route = _.first(paths(source, dest, dungeon));
       const type = "aggress";
-      const details = {occupant, route, dest};
+      const details = {occupant, source, route, dest};
       return {type, details};
     }, _));
   }, monsters));
