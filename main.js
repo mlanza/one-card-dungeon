@@ -12,6 +12,7 @@ $.swap($state, o.energize(eff.rolling(4, 5, 6)));
 $.swap($state, o.assignEnergy("speed"));
 $.swap($state, o.assignEnergy("attack"));
 $.swap($state, o.assignEnergy("defense"));
+$.swap($state, o.move({occupant: 0, offset: [0, 1], speed: 2}))
 //$.swap($state, o.teleport(1, [2, 0]));
 
 cmd();

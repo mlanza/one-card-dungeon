@@ -117,10 +117,10 @@ function cost(offset) {
   return _.eq([0, 0], offset) ? 0 : Math.abs(r) + Math.abs(c) == 2 ? 3 : 2;
 }
 
-function dist(path) {
+export function dist(path) {
   return _.reduce(function (sum, offset) {
     return sum + cost(offset);
-  }, 0, path);
+  }, 0, path) || null;
 }
 
 function cheapest(paths) {
@@ -249,16 +249,6 @@ function without(dungeon, ...targets){
   return _.reduce(_.assocIn(_, _, null), dungeon, targets);
 }
 
-export function canAttack(attacker, defender, state){
-  const {dungeon, occupants} = state;
-  const source = where(attacker, dungeon);
-  const target = where(defender, dungeon);
-  const range = _.chain(_.get(occupants, attacker), skill("range"));
-  const distance = _.chain(los(source, target, dungeon), _.first, dist);
-  const able = range && distance <= range;
-  return able ? {attacker, defender} : null;
-}
-
 function team(how, occupants){
   return _.reducekv(function(memo, idx, occupant){
     return how(idx) && occupant ? _.conj(memo, idx) : memo;
@@ -271,14 +261,6 @@ function uniq(items, key){
 
 export function range(source, target, dungeon){
   return _.chain(paths(source, target, dungeon), cheapest, _.first, dist);
-}
-
-export function tst(dungeon){
-  return paths([3,0], [4,0], dungeon);
-
-  const res = range([3,0], [4,0], dungeon);
-  debugger
-  return res;
 }
 
 export function closestMonsters(state){
@@ -362,6 +344,16 @@ export function render({dungeon}){
       return cell == null ? "." : cell;
     }, row));
   }, _), _.join("\n", _));
+}
+
+export function canAttack(attacker, defender, state){
+  const {dungeon, occupants} = state;
+  const source = where(attacker, dungeon);
+  const target = where(defender, dungeon);
+  const range = _.chain(_.get(occupants, attacker), skill("range"));
+  const distance = _.chain(los(source, target, dungeon), _.first, dist);
+  const able = distance && range && distance <= range;
+  return able ? {attacker, defender, range, distance} : null;
 }
 
 export function attacks(friend = isHero) {
